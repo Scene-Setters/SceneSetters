@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sajhasync/config/constants/app_color_theme.dart';
 
-class DashboardView extends ConsumerStatefulWidget {
-  const DashboardView({super.key});
+class BookMarked extends ConsumerStatefulWidget {
+  const BookMarked({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _DashboardViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _BookMarkedState();
 }
 
-class _DashboardViewState extends ConsumerState<DashboardView> {
+class _BookMarkedState extends ConsumerState<BookMarked> {
   SizedBox gap() {
     return const SizedBox(
       height: 10,
@@ -24,34 +23,23 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 150,
-          title: Column(
+          toolbarHeight: 80,
+          title: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 20, left: 10),
-                child: Text(
-                  'Your current location',
-                  style: TextStyle(
-                    fontFamily: 'Hind',
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-              gap(),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 8),
                 child: Row(
                   children: [
                     Icon(
-                      Icons.room,
+                      Icons.favorite_border,
                       color: Color(0xff0a8cd6),
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Text(
-                      'Adarshangar, Kapan',
+                      'Favorites',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 20,
@@ -68,9 +56,9 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             labelColor: Colors.black,
             unselectedLabelColor: Colors.grey,
             tabs: const [
-              Tab(text: 'I need a shared room'),
+              Tab(text: 'Rooms for sharing'),
               Tab(
-                text: 'I need to rent',
+                text: 'Rooms for rent',
               ),
             ],
             onTap: (index) {
@@ -189,7 +177,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                                         IconButton(
                                           onPressed: () {},
                                           icon: const Icon(
-                                              Icons.bookmark_outline_outlined),
+                                              Icons.bookmark_added_outlined),
                                         ),
                                       ],
                                     ),
@@ -325,24 +313,6 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                   },
                 ),
               ),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 60),
-          child: FloatingActionButton(
-            onPressed: () {
-              // final movieId = allMovieState.allMovies[0].id;
-              // ref.read(movieViewModelProvider.notifier).getMovieDetails(movieId!);
-              // Navigator.pushNamed(context, AppRoute.writeReview);
-            },
-            backgroundColor: AppColors.bodyColors,
-            heroTag: null,
-            foregroundColor: Colors.white,
-            child: const Icon(
-              Icons.add,
-              size: 22,
-            ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }

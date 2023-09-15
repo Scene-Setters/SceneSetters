@@ -183,7 +183,7 @@ class _LoginViewsState extends ConsumerState<LoginViews> {
                           //       // ref,
                           //     );
                           Navigator.popAndPushNamed(
-                              context, AppRoute.dashboardRoute);
+                              context, AppRoute.dashRoute);
                         }
                       },
                       child: const Text(

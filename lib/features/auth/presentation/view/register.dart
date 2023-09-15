@@ -12,7 +12,6 @@ class RegisterViews extends ConsumerStatefulWidget {
 
 class _RegisterViewsState extends ConsumerState<RegisterViews> {
   bool _isObscure = true;
-  final bool _isObscure1 = true;
   final registerkey = GlobalKey<FormState>();
 
   SizedBox gap() {
