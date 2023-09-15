@@ -61,6 +61,8 @@ dependencies:
   image_picker: ^1.0.1
   all_sensors: ^0.4.2
   shake: ^2.2.0
+  animated_toggle_switch: ^0.8.0
+
 
 
 
@@ -117,6 +119,10 @@ flutter:
     - family: Dongle
       fonts:
         - asset: fonts/Dongle/Dongle-Regular.ttf
+
+    - family: Hind
+      fonts:
+        - asset: fonts/Hind/Hind-Regular.ttf
 
     - family: Imdb
       fonts:
