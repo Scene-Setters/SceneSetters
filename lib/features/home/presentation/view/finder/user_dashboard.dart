@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sajhasync/config/constants/app_color_theme.dart';
+import 'package:sajhasync/config/router/app_route.dart';
 
 class DashboardView extends ConsumerStatefulWidget {
   const DashboardView({super.key});
@@ -70,7 +71,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             tabs: const [
               Tab(text: 'I need a shared room'),
               Tab(
-                text: 'I need to rent',
+                text: 'I need a rented room',
               ),
             ],
             onTap: (index) {
@@ -331,7 +332,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             onPressed: () {
               // final movieId = allMovieState.allMovies[0].id;
               // ref.read(movieViewModelProvider.notifier).getMovieDetails(movieId!);
-              // Navigator.pushNamed(context, AppRoute.writeReview);
+              Navigator.pushNamed(context, AppRoute.askPost);
             },
             backgroundColor: AppColors.bodyColors,
             heroTag: null,

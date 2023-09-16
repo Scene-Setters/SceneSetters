@@ -2,6 +2,7 @@ import 'package:sajhasync/features/home/presentation/view/finder/bookmarked.dart
 import 'package:sajhasync/features/home/presentation/view/finder/bottom_nav.dart';
 import 'package:sajhasync/features/home/presentation/view/finder/search.dart';
 import 'package:sajhasync/features/home/presentation/view/finder/user_dashboard.dart';
+import 'package:sajhasync/features/home/presentation/view/poster/ask_post.dart';
 
 import '../../features/auth/presentation/view/login.dart';
 import '../../features/auth/presentation/view/register.dart';
@@ -22,7 +23,7 @@ class AppRoute {
   // static const String resetPassword = '/reset';
   static const String search = '/search';
   static const String bookmark = '/bookmark';
-  // static const String writeReview = '/writeReview';
+  static const String askPost = '/askPost';
   // static const String updateReview = '/updateReview';
 
   static getApplicationRoute() {
@@ -36,7 +37,7 @@ class AppRoute {
       search: (context) => const SearchScreen(),
       bookmark: (context) => const BookMarked(),
       profileRoute: (context) => const ProfileScreen(),
-      // updatePassword: (context) => const UpdatePasswordView(),
+      askPost: (context) => const AskPoster(),
       // resetPassword: (context) => const ResetPassword(),
       // allReviews: (context) => const AllReviewsView(),
       // writeReview: (context) => const WriteReview(),
