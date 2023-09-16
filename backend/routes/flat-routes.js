@@ -14,6 +14,10 @@ router.route("/rent").post(verifyUser, flatController.createPostForRent);
 
 router.route("/share").post(verifyUser, flatController.createPostForShare);
 
+router.route("/rent").get(verifyUser, flatController.getPostsForRent);
+
+router.route("/share").get(verifyUser, flatController.getPostsForShare);
+
 router.post(
   "/uploadPostCover",
   verifyUser,

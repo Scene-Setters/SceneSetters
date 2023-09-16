@@ -108,14 +108,7 @@ const createPostForRent = async (req, res, next) => {
   const owner = req.user;
 
   try {
-    if (
-      !title ||
-      !description ||
-      !city ||
-      !area ||
-      !exactLocation ||
-      !price 
-    ) {
+    if (!title || !description || !city || !area || !exactLocation || !price) {
       return res
         .status(400)
         .json({ error: "Please fill in all required fields" });
@@ -161,14 +154,7 @@ const createPostForShare = async (req, res, next) => {
   const owner = req.user;
 
   try {
-    if (
-      !title ||
-      !description ||
-      !city ||
-      !area ||
-      !exactLocation ||
-      !price 
-    ) {
+    if (!title || !description || !city || !area || !exactLocation || !price) {
       return res
         .status(400)
         .json({ error: "Please fill in all required fields" });
@@ -194,6 +180,32 @@ const createPostForShare = async (req, res, next) => {
     res.status(201).json(flat);
   } catch (error) {
     next(error);
+  }
+};
+
+const getPostsForShare = async (req, res) => {
+  try {
+    const sharePosts = await Flat.find({ type: "Share" }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({ data: sharePosts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const getPostsForRent = async (req, res) => {
+  try {
+    const rentPosts = await Flat.find({ type: "Rent" }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({ data: rentPosts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -338,6 +350,8 @@ module.exports = {
   uploadFlatPhoto,
   createPostForRent,
   createPostForShare,
+  getPostsForShare,
+  getPostsForRent,
   getPostById,
   deletePostById,
   searchPosts,
