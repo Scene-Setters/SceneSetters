@@ -62,6 +62,11 @@ dependencies:
   all_sensors: ^0.4.2
   shake: ^2.2.0
   animated_toggle_switch: ^0.8.0
+  google_maps_flutter: ^2.4.0
+  flutter_google_places: ^0.3.0
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  geocoding: ^2.1.0
+  location: ^5.0.1
 
 
 
