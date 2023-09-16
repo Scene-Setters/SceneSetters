@@ -32,4 +32,22 @@ class ShareViewModel extends StateNotifier<ShareState> {
       ),
     );
   }
+
+  getSharedFlatsById(String id) async {
+    state = state.copyWith(isLoading: true);
+
+    final result = await shareUseCase.getSharedFlatsByUserId(id);
+
+    result.fold(
+      (failure) => state = state.copyWith(
+        isLoading: false,
+        error: failure.error,
+      ),
+      (shareFlatsByUserId) => state = state.copyWith(
+        isLoading: false,
+        shareFlatsByUserId: shareFlatsByUserId,
+        error: null,
+      ),
+    );
+  }
 }

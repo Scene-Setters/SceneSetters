@@ -69,4 +69,43 @@ class ShareRemoteDataSource {
       );
     }
   }
+
+  Future<Either<Failure, List<ShareEntity>>> getSharedById(String id) async {
+    try {
+      String? token;
+      await userSharedPrefs.getUserToken().then(
+            (value) => value.fold((l) => null, (r) => token = r!),
+          );
+      String rentDetails = '${ApiEndpoints.getAllPostsById}/$id';
+
+      var response = await dio.get(
+        rentDetails,
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        GetAllSharedDTO getAllRentsDTO =
+            GetAllSharedDTO.fromJson(response.data);
+
+        final shareEntities = shareApiModel.toEntityList(getAllRentsDTO.data);
+
+        return Right(shareEntities);
+      } else {
+        return Left(
+          Failure(
+            error: response.statusMessage.toString(),
+            statusCode: response.statusCode.toString(),
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(
+        Failure(
+          error: e.error.toString(),
+        ),
+      );
+    }
+  }
 }

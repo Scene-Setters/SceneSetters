@@ -13,4 +13,5 @@ final shareRepositoryProvider = Provider<ISharedRepository>(
 
 abstract class ISharedRepository {
   Future<Either<Failure, List<ShareEntity>>> getSharedFlats();
+  Future<Either<Failure, List<ShareEntity>>> getSharedFlatsByUserId(String id);
 }

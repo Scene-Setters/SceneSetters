@@ -31,4 +31,39 @@ class RentViewModel extends StateNotifier<RentState> {
       ),
     );
   }
+
+  getRentedFlatsById(String id) async {
+    state = state.copyWith(isLoading: true);
+
+    final result = await rentUseCase.getRentedFlatsByUserId(id);
+
+    result.fold(
+      (failure) => state = state.copyWith(
+        isLoading: false,
+        error: failure.error,
+      ),
+      (rentRoomsByUserId) => state = state.copyWith(
+        isLoading: false,
+        rentRoomsByUserId: rentRoomsByUserId,
+        error: null,
+      ),
+    );
+  }
+
+  visitRooms(String id) async {
+    state = state.copyWith(isLoading: true);
+
+    final result = await rentUseCase.visitRooms(id);
+
+    result.fold(
+      (failure) => state = state.copyWith(
+        isLoading: false,
+        error: failure.error,
+      ),
+      (data) => state = state.copyWith(
+        isLoading: false,
+        error: null,
+      ),
+    );
+  }
 }

@@ -23,4 +23,9 @@ class ShareRemoteRepositoryImpl implements ISharedRepository {
   Future<Either<Failure, List<ShareEntity>>> getSharedFlats() {
     return shareRemoteDataSource.getSharedFlats();
   }
+
+  @override
+  Future<Either<Failure, List<ShareEntity>>> getSharedFlatsByUserId(String id) {
+    return shareRemoteDataSource.getSharedById(id);
+  }
 }

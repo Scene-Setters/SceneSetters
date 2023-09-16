@@ -21,4 +21,9 @@ class ShareUseCase {
   Future<Either<Failure, List<ShareEntity>>> getSharedFlats() async {
     return await sharedRepository.getSharedFlats();
   }
+
+  Future<Either<Failure, List<ShareEntity>>> getSharedFlatsByUserId(
+      String id) async {
+    return await sharedRepository.getSharedFlatsByUserId(id);
+  }
 }

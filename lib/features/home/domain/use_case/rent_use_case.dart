@@ -21,4 +21,13 @@ class RentUseCase {
   Future<Either<Failure, List<RentEntity>>> getRentedFlats() async {
     return await rentRepository.getRentedFlats();
   }
+
+  Future<Either<Failure, List<RentEntity>>> getRentedFlatsByUserId(
+      String id) async {
+    return await rentRepository.getRentedFlatsByUserId(id);
+  }
+
+  Future<Either<Failure, bool>> visitRooms(String id) async {
+    return await rentRepository.visitRooms(id);
+  }
 }

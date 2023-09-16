@@ -23,4 +23,14 @@ class RentRemoteRepositoryImpl implements IRentRepository {
   Future<Either<Failure, List<RentEntity>>> getRentedFlats() {
     return rentremoteDataSource.getRentedFlats();
   }
+
+  @override
+  Future<Either<Failure, List<RentEntity>>> getRentedFlatsByUserId(String id) {
+    return rentremoteDataSource.getRentsById(id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> visitRooms(String id) {
+    return rentremoteDataSource.visitRoom(id);
+  }
 }

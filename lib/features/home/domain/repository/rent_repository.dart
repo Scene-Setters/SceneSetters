@@ -13,4 +13,6 @@ final rentRepositoryProvider = Provider<IRentRepository>(
 
 abstract class IRentRepository {
   Future<Either<Failure, List<RentEntity>>> getRentedFlats();
+  Future<Either<Failure, List<RentEntity>>> getRentedFlatsByUserId(String id);
+  Future<Either<Failure, bool>> visitRooms(String id);
 }

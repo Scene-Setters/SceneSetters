@@ -68,4 +68,78 @@ class RentRemoteDataSource {
       );
     }
   }
+
+  Future<Either<Failure, List<RentEntity>>> getRentsById(String id) async {
+    try {
+      String? token;
+      await userSharedPrefs.getUserToken().then(
+            (value) => value.fold((l) => null, (r) => token = r!),
+          );
+      String rentDetails = '${ApiEndpoints.getAllPostsById}/$id';
+
+      var response = await dio.get(
+        rentDetails,
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        GetAllRentsDTO getAllRentsDTO = GetAllRentsDTO.fromJson(response.data);
+
+        final rentEntities = rentApiModel.toEntityList(getAllRentsDTO.data);
+
+        return Right(rentEntities);
+      } else {
+        return Left(
+          Failure(
+            error: response.statusMessage.toString(),
+            statusCode: response.statusCode.toString(),
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(
+        Failure(
+          error: e.error.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<Either<Failure, bool>> visitRoom(String id) async {
+    try {
+      String? token;
+      await userSharedPrefs.getUserToken().then(
+            (value) => value.fold((l) => null, (r) => token = r!),
+          );
+
+      String addReviewEndpoint = '${ApiEndpoints.getAllPostsById}/$id';
+
+      var response = await dio.post(
+        addReviewEndpoint,
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        // Review added successfully
+        return const Right(true);
+      } else {
+        return Left(
+          Failure(
+            error: response.data['message'],
+            statusCode: response.statusCode.toString(),
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(
+        Failure(
+          error: e.message.toString(),
+        ),
+      );
+    }
+  }
 }

@@ -23,6 +23,7 @@ class ApiEndpoints {
   //======================== Share Routes =====================
 
   static const String getSharedRooms = "flats/share";
+  static const String getAllPostsById = 'flats';
   // static const String likeReview = "/like";
   // static const String dislikeReview = "/unlike";
   // static const String addReview = "/reviews";
