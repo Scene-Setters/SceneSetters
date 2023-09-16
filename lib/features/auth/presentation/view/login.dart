@@ -20,7 +20,7 @@ class _LoginViewsState extends ConsumerState<LoginViews> {
     );
   }
 
-  TextEditingController username = TextEditingController();
+  TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
 
   @override
@@ -75,16 +75,16 @@ class _LoginViewsState extends ConsumerState<LoginViews> {
                 padds('LOGIN', 40.0, 1.5, const Color(0xff001118), 20, 0, 20, 0,
                     0, FontWeight.bold),
                 gap(),
-                padds('Username', 35.0, 1.0, Colors.black, 20, 10, 0, 0, 0,
+                padds('Phone No', 35.0, 1.0, Colors.black, 20, 10, 0, 0, 0,
                     FontWeight.w500),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
                   child: TextFormField(
-                    key: const ValueKey('username'),
-                    controller: username,
+                    key: const ValueKey('phone'),
+                    controller: phone,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
-                        return 'Please enter username';
+                        return 'Please enter phone';
                       }
                       return null;
                     },
@@ -101,12 +101,13 @@ class _LoginViewsState extends ConsumerState<LoginViews> {
                           const EdgeInsets.fromLTRB(25.0, 20.0, 25.00, 20.0),
                       filled: true,
                       fillColor: Colors.white,
-                      hintText: 'Enter your username',
+                      hintText: 'Enter your phone no',
                       hintStyle: const TextStyle(
                         fontSize: 15.0,
                       ),
                     ),
                     cursorColor: Colors.black,
+                    keyboardType: TextInputType.number,
                   ),
                 ),
                 gap(),
@@ -178,7 +179,7 @@ class _LoginViewsState extends ConsumerState<LoginViews> {
                           //     .read(authViewModelProvider.notifier)
                           //     .loginUser(
                           //       context,
-                          //       username.text,
+                          //       phone.text,
                           //       password.text,
                           //       // ref,
                           //     );
