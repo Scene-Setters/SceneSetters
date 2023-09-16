@@ -1,0 +1,26 @@
+{
+  "title": "Cozy Apartment in the Heart of the City",
+  "description": "A beautiful and spacious apartment with a great view.",
+  "city": "New York",
+  "area": "Kirtipur",
+  "exactLocation": "123 Main Street, Apt 4B",
+  "price": 2000,
+  "capacity": 4,
+  "amenities": ["Wi-Fi", "Air Conditioning", "TV", "Kitchen"],
+  "photos": ["https://example.com/photo1.jpg", "https://example.com/photo2.jpg"],
+  "type": "Rent",
+  "preference": "Mixed", 
+}
+
+{
+  "username": "johndoe",
+  "fullname": "John Doe",
+  "sex": "Male",
+  "age": 30,
+  "maritalStatus": "Single",
+  "email": "johndoe@example.com",
+  "proof": "ID12345",
+  "image": "https://example.com/avatar.jpg",
+  "password": "password123",
+  "phoneNumber": "1234567890"
+}

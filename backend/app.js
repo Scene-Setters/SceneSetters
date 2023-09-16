@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const user_routes = require("./routes/user-routes");
+const flat_routes = require("./routes/flat-routes");
 const { verifyUser } = require("./middlewares/auth");
 const cors = require("cors");
 const MONGODB_URI =
@@ -24,6 +25,8 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/users", user_routes);
+
+app.use("/flats", verifyUser, flat_routes)
 
 // Error handling middleware
 /* istanbul ignore next */
