@@ -6,9 +6,9 @@ const registerUser = async (req, res, next) => {
   const { password, fullname, email, sex, age, phoneNumber, image } = req.body;
 
   try {
-    const existingUser = await User.findOne({ username: username });
+    const existingUser = await User.findOne({ phoneNumber: phoneNumber });
     if (existingUser) {
-      return res.status(400).json({ error: 'Duplicate username' });
+      return res.status(400).json({ error: 'Duplicate phone number' });
     }
 
     if (!password || !fullname || !email || !phoneNumber || !age) {
