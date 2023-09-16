@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../config/router/app_route.dart';
+import '../../domain/entity/user_entity.dart';
+import '../viewmodel/auth_view_model.dart';
 
 class RegisterViews extends ConsumerStatefulWidget {
   const RegisterViews({super.key});
@@ -371,15 +373,16 @@ class _RegisterViewsState extends ConsumerState<RegisterViews> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (registerkey.currentState!.validate()) {
-                          // var user = UserEntity(
-                          //   fullname: fullname.text,
-                          //   email: email.text,
-                          //   password: password.text,
-                          //   confirmPassword: confirmpass.text,
-                          // );
-                          // ref
-                          //     .read(authViewModelProvider.notifier)
-                          //     .registerUser(context, user);
+                          var user = UserEntity(
+                            fullname: fullname.text,
+                            phone: phone.text,
+                            age: int.parse(age.text),
+                            email: email.text,
+                            password: password.text,
+                          );
+                          ref
+                              .read(authViewModelProvider.notifier)
+                              .registerUser(context, user);
                         }
                       },
                       child: const Text(

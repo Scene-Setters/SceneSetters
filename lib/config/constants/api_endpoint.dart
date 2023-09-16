@@ -14,23 +14,23 @@ class ApiEndpoints {
   static const String uploadImage = "users/uploadImage";
   static const String updateProfile = "users/edit-profile";
 
-  // //======================== Movie Routes =====================
-  // static const String getTrendingMovies = "movies/trending";
+  //======================== Rent Routes =====================
+  static const String getRentedRooms = "flats/rent";
   // static const String getPopularMovies = "movies/popular";
   // static const String getTopRatedMovies = "movies/top_rated";
   // static const String getMovieDetails = "movies/";
 
-  // //======================== Review Routes =====================
+  //======================== Share Routes =====================
 
-  // static const String getAllReviews = "/reviews";
+  static const String getSharedRooms = "flats/share";
   // static const String likeReview = "/like";
   // static const String dislikeReview = "/unlike";
   // static const String addReview = "/reviews";
   // static const String updateReview = "/reviews";
   // static const String deleteReview = "/reviews";
 
-  // //======================== Search Routes =====================
-  // static const String searchMovies = "movies/search";
+  //======================== Search Routes =====================
+  static const String searchRooms = "/search";
 
   // //======================== Watchlist Routes =====================
   // static const String createWatchlist = "watchlist/";

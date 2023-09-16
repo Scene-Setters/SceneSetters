@@ -25,7 +25,8 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 150,
+          automaticallyImplyLeading: false,
+          toolbarHeight: 100,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

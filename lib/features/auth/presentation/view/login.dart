@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../config/router/app_route.dart';
+import '../viewmodel/auth_view_model.dart';
 
 class LoginViews extends ConsumerStatefulWidget {
   const LoginViews({super.key});
@@ -84,7 +85,7 @@ class _LoginViewsState extends ConsumerState<LoginViews> {
                     controller: phone,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
-                        return 'Please enter phone';
+                        return 'Please enter phone no';
                       }
                       return null;
                     },
@@ -175,16 +176,16 @@ class _LoginViewsState extends ConsumerState<LoginViews> {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (pinkey.currentState!.validate()) {
-                          // await ref
-                          //     .read(authViewModelProvider.notifier)
-                          //     .loginUser(
-                          //       context,
-                          //       phone.text,
-                          //       password.text,
-                          //       // ref,
-                          //     );
-                          Navigator.popAndPushNamed(
-                              context, AppRoute.dashRoute);
+                          await ref
+                              .read(authViewModelProvider.notifier)
+                              .loginUser(
+                                context,
+                                phone.text,
+                                password.text,
+                                // ref,
+                              );
+                          // Navigator.popAndPushNamed(
+                          //     context, AppRoute.dashRoute);
                         }
                       },
                       child: const Text(

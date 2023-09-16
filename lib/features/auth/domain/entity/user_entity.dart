@@ -1,23 +1,26 @@
 import 'package:equatable/equatable.dart';
 
 class UserEntity extends Equatable {
-  final String? username;
+  final String? fullname;
   final String? email;
   final String? password;
-  final String? confirmPassword;
+  final String? phone;
+  final int? age;
 
   const UserEntity({
-    this.username,
+    this.fullname,
     this.email,
     this.password,
-    this.confirmPassword,
+    this.phone,
+    this.age,
   });
 
   @override
   List<Object?> get props => [
-        username,
+        fullname,
         email,
         password,
-        confirmPassword,
+        phone,
+        age,
       ];
 }

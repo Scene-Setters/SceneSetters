@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddRoom extends StatefulWidget {
+class AddRoom extends ConsumerStatefulWidget {
   const AddRoom({
     super.key,
   });
 
   @override
-  State<AddRoom> createState() => _AddRoomState();
+  ConsumerState<AddRoom> createState() => _AddRoomState();
 }
 
 TextEditingController title = TextEditingController();
@@ -21,7 +22,7 @@ TextEditingController capacity = TextEditingController();
 TextEditingController exactLocation = TextEditingController();
 TextEditingController preferences = TextEditingController();
 
-class _AddRoomState extends State<AddRoom> {
+class _AddRoomState extends ConsumerState<AddRoom> {
   SizedBox gap() {
     return const SizedBox(
       height: 10,
@@ -31,8 +32,6 @@ class _AddRoomState extends State<AddRoom> {
   File? _image;
 
   bool isChecked = false;
-  // Track whether the user agreed to terms
-  final bool _isObscure = true;
 
   final pinkey = GlobalKey<FormState>();
 
@@ -44,43 +43,22 @@ class _AddRoomState extends State<AddRoom> {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 150,
-        title: Column(
+        toolbarHeight: 100,
+        title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 45),
-              child: Column(
-                children: [
-                  const Row(
-                    children: [
-                      SizedBox(
-                        width: 250,
-                      ),
-                    ],
-                  ),
-                  gap(),
-                  const Column(
-                    children: [
-                      Text(
-                        'List new room/flats ',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'List in the market where listers are waiting ',
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 12,
-                            color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ],
+            Text(
+              'List new room/flats ',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
+            ),
+            Text(
+              'List in the market where listers are waiting ',
+              style: TextStyle(
+                  fontFamily: 'Poppins', fontSize: 12, color: Colors.grey),
             ),
           ],
         ),
@@ -101,6 +79,7 @@ class _AddRoomState extends State<AddRoom> {
                   ),
                   child: TextFormField(
                     key: const ValueKey('title'),
+                    controller: title,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'Please enter property title ';
@@ -133,6 +112,7 @@ class _AddRoomState extends State<AddRoom> {
                   ),
                   child: TextFormField(
                     key: const ValueKey('price'),
+                    controller: price,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'please enter the price ';
@@ -167,6 +147,7 @@ class _AddRoomState extends State<AddRoom> {
                           color: color,
                         ),
                         child: TextFormField(
+                          controller: address,
                           key: const ValueKey('address'),
                           validator: (text) {
                             if (text == null || text.isEmpty) {
@@ -200,6 +181,7 @@ class _AddRoomState extends State<AddRoom> {
                           color: color,
                         ),
                         child: TextFormField(
+                          controller: location,
                           key: const ValueKey('location'),
                           validator: (text) {
                             if (text == null || text.isEmpty) {
@@ -235,6 +217,7 @@ class _AddRoomState extends State<AddRoom> {
                     color: color,
                   ),
                   child: TextFormField(
+                    controller: exactLocation,
                     key: const ValueKey('exact location'),
                     validator: (text) {
                       if (text == null || text.isEmpty) {
@@ -269,6 +252,7 @@ class _AddRoomState extends State<AddRoom> {
                   ),
                   child: TextFormField(
                     key: const ValueKey('amenities'),
+                    controller: amenitites,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'Please enter a amenities';
@@ -302,6 +286,7 @@ class _AddRoomState extends State<AddRoom> {
                   ),
                   child: TextFormField(
                     key: const ValueKey('capacity'),
+                    controller: capacity,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'Please enter a capacity';
@@ -335,6 +320,7 @@ class _AddRoomState extends State<AddRoom> {
                   ),
                   child: TextFormField(
                     key: const ValueKey('description'),
+                    controller: description,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'Please enter a description';
@@ -368,6 +354,7 @@ class _AddRoomState extends State<AddRoom> {
                   ),
                   child: TextFormField(
                     key: const ValueKey('preferences'),
+                    controller: preferences,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'Please enter your preferences ';

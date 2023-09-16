@@ -29,18 +29,18 @@ class _AskPosterState extends ConsumerState<AskPoster> {
         children: [
           Align(
             alignment: Alignment.center,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.bodyColors,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              height: 100,
-              width: 350,
-              child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoute.addRoom);
-                  },
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoute.addRoom);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.bodyColors,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                height: 100,
+                width: 350,
+                child: Center(
                   child: Text(
                     'Put your flat up for sharing?',
                     textAlign: TextAlign.center,
@@ -67,18 +67,13 @@ class _AskPosterState extends ConsumerState<AskPoster> {
               height: 100,
               width: 350,
               child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoute.addRoom);
-                  },
-                  child: Text(
-                    'Put your room/flat for rent?',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppColors.appbarColors,
-                      fontFamily: 'Hind',
-                      fontSize: 25,
-                    ),
+                child: Text(
+                  'Put your room/flat for rent?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppColors.appbarColors,
+                    fontFamily: 'Hind',
+                    fontSize: 25,
                   ),
                 ),
               ),

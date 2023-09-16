@@ -23,6 +23,7 @@ class _BookMarkedState extends ConsumerState<BookMarked> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           toolbarHeight: 80,
           title: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
