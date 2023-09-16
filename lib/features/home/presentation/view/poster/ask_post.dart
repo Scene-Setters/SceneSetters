@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sajhasync/config/constants/app_color_theme.dart';
+import 'package:sajhasync/config/router/app_route.dart';
 
 class AskPoster extends ConsumerStatefulWidget {
   const AskPoster({super.key});
@@ -36,13 +37,18 @@ class _AskPosterState extends ConsumerState<AskPoster> {
               height: 100,
               width: 350,
               child: Center(
-                child: Text(
-                  'Put your flat up for sharing?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: AppColors.appbarColors,
-                    fontFamily: 'Hind',
-                    fontSize: 25,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoute.addRoom);
+                  },
+                  child: Text(
+                    'Put your flat up for sharing?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: AppColors.appbarColors,
+                      fontFamily: 'Hind',
+                      fontSize: 25,
+                    ),
                   ),
                 ),
               ),
@@ -61,13 +67,18 @@ class _AskPosterState extends ConsumerState<AskPoster> {
               height: 100,
               width: 350,
               child: Center(
-                child: Text(
-                  'Put your room/flat for rent?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: AppColors.appbarColors,
-                    fontFamily: 'Hind',
-                    fontSize: 25,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoute.addRoom);
+                  },
+                  child: Text(
+                    'Put your room/flat for rent?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: AppColors.appbarColors,
+                      fontFamily: 'Hind',
+                      fontSize: 25,
+                    ),
                   ),
                 ),
               ),

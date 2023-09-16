@@ -6,6 +6,7 @@ import 'package:sajhasync/features/home/presentation/view/poster/ask_post.dart';
 
 import '../../features/auth/presentation/view/login.dart';
 import '../../features/auth/presentation/view/register.dart';
+import '../../features/home/presentation/view/finder/add_room.dart';
 import '../../features/home/presentation/view/finder/profile.dart';
 
 class AppRoute {
@@ -14,6 +15,7 @@ class AppRoute {
   // static const String splashRoute = '/';
   // static const String watchlistRoute = '/watchlists';
   static const String loginRoute = '/login';
+  static const String addRoom = '/addRoom';
   static const String registerRoute = '/register';
   static const String dashboardRoute = '/dashboard';
   static const String dashRoute = '/dash';
@@ -35,6 +37,7 @@ class AppRoute {
       dashboardRoute: (context) => const DashboardView(),
       dashRoute: (context) => const BottomNavView(),
       search: (context) => const SearchScreen(),
+      addRoom: (context) => const AddRoom(),
       bookmark: (context) => const BookMarked(),
       profileRoute: (context) => const ProfileScreen(),
       askPost: (context) => const AskPoster(),
