@@ -26,6 +26,7 @@ class AppRoute {
   static const String search = '/search';
   static const String bookmark = '/bookmark';
   static const String askPost = '/askPost';
+  static const String detailsRoute = '/details';
   // static const String updateReview = '/updateReview';
 
   static getApplicationRoute() {
@@ -41,6 +42,7 @@ class AppRoute {
       bookmark: (context) => const BookMarked(),
       profileRoute: (context) => const ProfileScreen(),
       askPost: (context) => const AskPoster(),
+      detailsRoute: (context) => const IndividualView(),
       // resetPassword: (context) => const ResetPassword(),
       // allReviews: (context) => const AllReviewsView(),
       // writeReview: (context) => const WriteReview(),
