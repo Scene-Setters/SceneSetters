@@ -91,7 +91,7 @@ const uploadFlatPhoto = async (req, res, next) => {
   }
 };
 
-const createPost = async (req, res, next) => {
+const createPostForRent = async (req, res, next) => {
   const {
     title,
     description,
@@ -114,8 +114,7 @@ const createPost = async (req, res, next) => {
       !city ||
       !area ||
       !exactLocation ||
-      !price ||
-      !type
+      !price 
     ) {
       return res
         .status(400)
@@ -133,7 +132,60 @@ const createPost = async (req, res, next) => {
       amenities,
       photos,
       owner: owner,
-      type,
+      type: "Rent",
+      preference,
+    };
+
+    // Create the flat document in the database
+    const flat = await Flat.create(flatData);
+    res.status(201).json(flat);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const createPostForShare = async (req, res, next) => {
+  const {
+    title,
+    description,
+    city,
+    area,
+    exactLocation,
+    price,
+    capacity,
+    amenities,
+    photos,
+    type,
+    preference,
+  } = req.body;
+  const owner = req.user;
+
+  try {
+    if (
+      !title ||
+      !description ||
+      !city ||
+      !area ||
+      !exactLocation ||
+      !price 
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Please fill in all required fields" });
+    }
+
+    const flatData = {
+      title,
+      description,
+      city,
+      area,
+      exactLocation,
+      price,
+      capacity,
+      amenities,
+      photos,
+      owner: owner,
+      type: "Share",
       preference,
     };
 
@@ -284,7 +336,8 @@ module.exports = {
   getAllBookmarkedPosts,
   getPostsUploadedByCurrentUser,
   uploadFlatPhoto,
-  createPost,
+  createPostForRent,
+  createPostForShare,
   getPostById,
   deletePostById,
   searchPosts,

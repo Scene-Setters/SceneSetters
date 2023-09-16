@@ -7,9 +7,12 @@ const upload = require("../middlewares/uploads");
 router
   .route("/")
   .get(flatController.getAllPosts)
-  .post(verifyUser, flatController.createPost)
   .put((req, res) => res.status(405).json({ error: "Method not allowed" }))
   .delete((req, res) => res.status(405).json({ error: "Method not allowed" }));
+
+router.route("/rent").post(verifyUser, flatController.createPostForRent);
+
+router.route("/share").post(verifyUser, flatController.createPostForShare);
 
 router.post(
   "/uploadPostCover",
@@ -42,6 +45,5 @@ router.post("/bookmark/:post_id", verifyUser, flatController.bookmarkPost);
 
 // Remove bookmark from a post
 router.delete("/bookmark/:post_id", verifyUser, flatController.removeBookmark);
-
 
 module.exports = router;

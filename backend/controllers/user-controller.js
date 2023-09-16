@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const registerUser = async (req, res, next) => {
-  const { username, password, fullname, email, sex, age, phoneNumber, image } = req.body;
+  const { password, fullname, email, sex, age, phoneNumber, image } = req.body;
 
   try {
     const existingUser = await User.findOne({ username: username });
@@ -11,7 +11,7 @@ const registerUser = async (req, res, next) => {
       return res.status(400).json({ error: 'Duplicate username' });
     }
 
-    if (!username || !password || !fullname || !email || !sex || !age || !phoneNumber) {
+    if (!password || !fullname || !email || !phoneNumber || !age) {
       return res.status(400).json({ error: 'Please fill in all fields' });
     }
 
@@ -22,7 +22,6 @@ const registerUser = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-      username,
       password: hashedPassword,
       sex,
       age,
@@ -39,15 +38,15 @@ const registerUser = async (req, res, next) => {
 };
 
 const loginUser = async (req, res, next) => {
-  const { username, password } = req.body;
+  const { phoneNumber, password } = req.body;
 
   try {
-    const user = await User.findOne({ username: username });
+    const user = await User.findOne({ phoneNumber: phoneNumber });
     if (!user) {
       return res.status(400).json({ error: "User is not registered" });
     }
 
-    if (!username || !password) {
+    if (!phoneNumber || !password) {
       return res.status(400).json({ error: "Please fill in all fields" });
     }
 
@@ -58,7 +57,7 @@ const loginUser = async (req, res, next) => {
 
     const payload = {
       id: user._id,
-      username: user.username,
+      phoneNumber: user.phoneNumber,
       fullname: user.fullname,
     };
 

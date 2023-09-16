@@ -32,7 +32,6 @@ const flatSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["Rent", "Share"],
     required: true,
   },
   preference: {
