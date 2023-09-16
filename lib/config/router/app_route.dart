@@ -1,8 +1,9 @@
+import 'package:sajhasync/features/details/presentation/view/individual.dart';
+import 'package:sajhasync/features/home/presentation/view/finder/add_room.dart';
 import 'package:sajhasync/features/home/presentation/view/finder/bookmarked.dart';
 import 'package:sajhasync/features/home/presentation/view/finder/bottom_nav.dart';
 import 'package:sajhasync/features/home/presentation/view/finder/search.dart';
 import 'package:sajhasync/features/home/presentation/view/finder/user_dashboard.dart';
-import 'package:sajhasync/features/home/presentation/view/finder/add_room.dart';
 import 'package:sajhasync/features/home/presentation/view/poster/ask_post.dart';
 
 import '../../features/auth/presentation/view/login.dart';
@@ -18,7 +19,7 @@ class AppRoute {
   static const String registerRoute = '/register';
   static const String dashboardRoute = '/dashboard';
   static const String dashRoute = '/dash';
-  // static const String editprofileRoute = '/edit';
+  static const String individual = '/individual';
   static const String profileRoute = '/profile';
   // static const String updatePassword = '/update';
   // static const String resetPassword = '/reset';
@@ -39,7 +40,7 @@ class AppRoute {
       bookmark: (context) => const BookMarked(),
       profileRoute: (context) => const ProfileScreen(),
       askPost: (context) => const AskPoster(),
-      // resetPassword: (context) => const ResetPassword(),
+      individual: (context) => const IndividualView(),
       // allReviews: (context) => const AllReviewsView(),
       // writeReview: (context) => const WriteReview(),
       addRoom: (context) => const AddRoom(),

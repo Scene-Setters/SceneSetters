@@ -5,6 +5,8 @@ import 'package:sajhasync/features/home/presentation/view/finder/bookmarked.dart
 import 'package:sajhasync/features/home/presentation/view/finder/profile.dart';
 import 'package:sajhasync/features/home/presentation/view/finder/search.dart';
 import 'package:sajhasync/features/home/presentation/view/finder/user_dashboard.dart';
+import 'package:sajhasync/features/home/presentation/viewmodel/rent_view_model.dart';
+import 'package:sajhasync/features/home/presentation/viewmodel/share_view_model.dart';
 
 import '../../../../../config/constants/app_color_theme.dart';
 
@@ -17,6 +19,15 @@ class BottomNavView extends ConsumerStatefulWidget {
 
 class _BottomNavViewState extends ConsumerState<BottomNavView> {
   final navigationKey = GlobalKey<CurvedNavigationBarState>();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(rentViewModelProvider.notifier).getRentedFlats();
+      ref.read(shareViewModelProvider.notifier).getSharedFlats();
+    });
+    super.initState();
+  }
 
   int index = 0;
   final screens = [

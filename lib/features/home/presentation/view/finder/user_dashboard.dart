@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sajhasync/config/constants/app_color_theme.dart';
 import 'package:sajhasync/config/router/app_route.dart';
+import 'package:sajhasync/features/home/presentation/viewmodel/rent_view_model.dart';
+import 'package:sajhasync/features/home/presentation/viewmodel/share_view_model.dart';
 
 class DashboardView extends ConsumerStatefulWidget {
   const DashboardView({super.key});
@@ -17,10 +19,42 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     );
   }
 
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+
+  // Function to reload the data when the user triggers a refresh.
+  Future<void> _handleRefresh() async {
+    // Implement the logic to reload the data here.
+    ref.watch(rentViewModelProvider.notifier).getRentedFlats();
+    ref.watch(shareViewModelProvider.notifier).getSharedFlats();
+  }
+
   int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    var rentState = ref.watch(rentViewModelProvider);
+    var shareState = ref.watch(shareViewModelProvider);
+
+    if (rentState.isLoading || shareState.isLoading) {
+      return Scaffold(
+        body: Center(
+          child: RotationTransition(
+            turns: Tween(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                parent: const AlwaysStoppedAnimation(0.0),
+                curve: Curves.linear,
+              ),
+            ),
+            child: CircularProgressIndicator(
+              color: AppColors.bodyColors,
+              backgroundColor: Colors.grey,
+            ),
+          ),
+        ),
+      );
+    }
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -84,247 +118,274 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
           ),
         ),
         body: selectedIndex == 0
-            ? Padding(
-                padding: const EdgeInsets.only(bottom: 15),
-                child: ListView.builder(
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding:
-                          const EdgeInsets.only(top: 20, left: 20, right: 20),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.white,
-                        ),
-                        child: Row(
-                          children: [
-                            const SizedBox(
-                              height: 180,
-                              width: 120,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                                child: Image(
-                                  image: AssetImage(
-                                      'images/movies/bansheerin.jpg'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+            ? RefreshIndicator(
+                key: _refreshIndicatorKey,
+                onRefresh: _handleRefresh,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: ListView.builder(
+                    itemCount: rentState.rentRooms.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 20, right: 20),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, AppRoute.individual);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.white,
                             ),
-                            Expanded(
-                              // Wrap the Column in Expanded
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, right: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Double Room with great view of bagmati',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  height: 180,
+                                  width: 120,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
                                     ),
-                                    const SizedBox(
-                                      height: 7,
+                                    child: Image(
+                                      image: AssetImage(
+                                          'images/movies/bansheerin.jpg'),
+                                      fit: BoxFit.cover,
                                     ),
-                                    const Text(
-                                      'Kapan',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: 'Hind',
-                                        color: Colors.grey,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Wrap(
-                                      alignment: WrapAlignment.center,
+                                  ),
+                                ),
+                                Expanded(
+                                  // Wrap the Column in Expanded
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, right: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Icon(
-                                          Icons.bed_outlined,
-                                          size: 20,
+                                        Text(
+                                          rentState.rentRooms[index].title,
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        SizedBox(
-                                          width: 10,
+                                        const SizedBox(
+                                          height: 7,
                                         ),
                                         Text(
-                                          '2 room',
-                                          style: TextStyle(
+                                          rentState.rentRooms[index].area,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: 'Hind',
                                             color: Colors.grey,
-                                            fontSize: 13,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Wrap(
+                                          alignment: WrapAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.bed_outlined,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              '${rentState.rentRooms[index].capacity} rooms',
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Rs ${rentState.rentRooms[index].price}',
+                                              style: const TextStyle(
+                                                fontSize: 17,
+                                                fontFamily: 'Hind',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const Text(
+                                              ' / month',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontFamily: 'Hind',
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(Icons
+                                                  .bookmark_outline_outlined),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Row(
-                                      children: [
-                                        Text(
-                                          'Rs 12000',
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontFamily: 'Hind',
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          ' / month',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontFamily: 'Hind',
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                              Icons.bookmark_outline_outlined),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               )
-            : Padding(
-                padding: const EdgeInsets.only(bottom: 15),
-                child: ListView.builder(
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding:
-                          const EdgeInsets.only(top: 20, left: 20, right: 20),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.white,
-                        ),
-                        child: Row(
-                          children: [
-                            const SizedBox(
-                              height: 180,
-                              width: 120,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                                child: Image(
-                                  image: AssetImage('images/movies/inster.jpg'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+            : RefreshIndicator(
+                key: _refreshIndicatorKey,
+                onRefresh: _handleRefresh,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: ListView.builder(
+                    itemCount: shareState.shareFlats.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 20, right: 20),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              AppRoute.individual,
+                              arguments: shareState.shareFlats[index],
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.white,
                             ),
-                            Expanded(
-                              // Wrap the Column in Expanded
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, right: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Double Room with great view of bagmati',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  height: 180,
+                                  width: 120,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
                                     ),
-                                    const SizedBox(
-                                      height: 7,
+                                    child: Image(
+                                      image: AssetImage(
+                                          'images/movies/inster.jpg'),
+                                      fit: BoxFit.cover,
                                     ),
-                                    const Text(
-                                      'Kapan',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: 'Hind',
-                                        color: Colors.grey,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Wrap(
-                                      alignment: WrapAlignment.center,
+                                  ),
+                                ),
+                                Expanded(
+                                  // Wrap the Column in Expanded
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, right: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Icon(
-                                          Icons.bed_outlined,
-                                          size: 20,
+                                        Text(
+                                          shareState.shareFlats[index].title,
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        SizedBox(
-                                          width: 10,
+                                        const SizedBox(
+                                          height: 7,
                                         ),
                                         Text(
-                                          '2 room',
-                                          style: TextStyle(
+                                          shareState.shareFlats[index].area,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: 'Hind',
                                             color: Colors.grey,
-                                            fontSize: 13,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Wrap(
+                                          alignment: WrapAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.bed_outlined,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              '${shareState.shareFlats[index].capacity} rooms',
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Rs ${shareState.shareFlats[index].price}',
+                                              style: const TextStyle(
+                                                fontSize: 17,
+                                                fontFamily: 'Hind',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const Text(
+                                              ' / month',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontFamily: 'Hind',
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(Icons
+                                                  .bookmark_outline_outlined),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Row(
-                                      children: [
-                                        Text(
-                                          'Rs 12000',
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontFamily: 'Hind',
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          ' / month',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontFamily: 'Hind',
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                              Icons.bookmark_outline_outlined),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
         floatingActionButton: Padding(

@@ -14,6 +14,20 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
   final ScrollController _scrollController = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  // List<ShareEntity> sharedFlats;
+
+  // @override
+  // void didChangeDependencies() {
+  //   sharedFlats =
+  //       ModalRoute.of(context)!.settings.arguments as List<ShareEntity>;
+  //   super.didChangeDependencies();
+  // }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(
@@ -85,7 +99,7 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                 padding: EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 25),
                                 child: Text(
-                                  'Double room with great view of Bagmati river',
+                                  'Descritpiom',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -230,9 +244,9 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                       Text(
                                         '24 hrs water', // Replace with the profile name
                                         style: TextStyle(
-                                          fontSize:
-                                              13.0, 
-                                              fontFamily: 'Hind',// Adjust the font size as needed
+                                          fontSize: 13.0,
+                                          fontFamily:
+                                              'Hind', // Adjust the font size as needed
                                         ),
                                       ),
                                     ],
@@ -243,9 +257,9 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                       Text(
                                         'Kitchen', // Replace with the profile name
                                         style: TextStyle(
-                                          fontSize:
-                                              13.0,
-                                              fontFamily: 'Hind', // Adjust the font size as needed
+                                          fontSize: 13.0,
+                                          fontFamily:
+                                              'Hind', // Adjust the font size as needed
                                         ),
                                       ),
                                     ],
@@ -256,9 +270,9 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                       Text(
                                         'Free Parking', // Replace with the profile name
                                         style: TextStyle(
-                                          fontSize:
-                                              13.0,
-                                              fontFamily: 'Hind', // Adjust the font size as needed
+                                          fontSize: 13.0,
+                                          fontFamily:
+                                              'Hind', // Adjust the font size as needed
                                         ),
                                       ),
                                     ],
@@ -269,9 +283,9 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                       Text(
                                         'Free Wifi', // Replace with the profile name
                                         style: TextStyle(
-                                          fontSize:
-                                              13.0, 
-                                              fontFamily: 'Hind',// Adjust the font size as needed
+                                          fontSize: 13.0,
+                                          fontFamily:
+                                              'Hind', // Adjust the font size as needed
                                         ),
                                       ),
                                     ],
@@ -287,7 +301,7 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 'Rs.12000 / month', // Replace with the profile name
                                 style: TextStyle(
                                   fontSize:
@@ -296,34 +310,34 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                   fontFamily: 'Hind',
                                 ),
                               ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                    context, AppRoute.dashboardRoute);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                
-                                elevation:
-                                    50, // Set the text color with reduced opacity
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50.0),
-                                  side: const BorderSide(color: Colors.black),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, AppRoute.dashboardRoute);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    elevation:
+                                        50, // Set the text color with reduced opacity
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      side:
+                                          const BorderSide(color: Colors.black),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15, horizontal: 10),
+                                  ),
+                                  child: const Text(
+                                    'Visit for details',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontFamily: 'Hind',
+                                    ),
+                                  ),
                                 ),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 10),
                               ),
-                              child: const Text(
-                                'Visit for details',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontFamily: 'Hind',
-                                ),
-                              ),
-                                                      ),
-                            ),
                             ],
                           ),
                         ),
@@ -331,7 +345,6 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                         // Divider
                       ],
                     ),
-                    
                   ],
                 ),
               ),

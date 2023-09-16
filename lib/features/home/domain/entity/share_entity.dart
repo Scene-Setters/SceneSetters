@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class RentEntity extends Equatable {
+class ShareEntity extends Equatable {
   final String title;
   final String description;
   final String city;
@@ -12,7 +12,7 @@ class RentEntity extends Equatable {
   final List<String> photos;
   final String preference;
 
-  const RentEntity({
+  const ShareEntity({
     required this.title,
     required this.description,
     required this.city,
@@ -39,7 +39,7 @@ class RentEntity extends Equatable {
         preference,
       ];
 
-  RentEntity.empty()
+  ShareEntity.empty()
       : this(
           title: '',
           description: '',
