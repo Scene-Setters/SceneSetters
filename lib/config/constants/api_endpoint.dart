@@ -31,7 +31,8 @@ class ApiEndpoints {
   // static const String deleteReview = "/reviews";
 
   //======================== Search Routes =====================
-  static const String searchRooms = "/search";
+  // static const String searchRooms = "/search";
+  static const String getSearchByAddress = "flats/search";
 
   // //======================== Watchlist Routes =====================
   // static const String createWatchlist = "watchlist/";

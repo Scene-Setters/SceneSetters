@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:sajhasync/features/home/data/model/rent_api_model.dart';
 import 'package:sajhasync/features/home/data/model/share_api_model.dart';
 
 part 'get_all_shared.g.dart';
