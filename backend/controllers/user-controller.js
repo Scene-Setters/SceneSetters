@@ -11,6 +11,10 @@ const registerUser = async (req, res, next) => {
       return res.status(400).json({ error: 'Duplicate phone number' });
     }
 
+    if (!password || !fullname || !email || !phoneNumber || !age) {
+      return res.status(400).json({ error: 'Please fill in all fields' });
+    }
+
     if (!email.includes('@') || !email.includes('.')) {
       return res.status(400).json({ error: 'Please enter a valid email' });
     }

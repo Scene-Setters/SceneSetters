@@ -209,17 +209,52 @@ const getPostsForRent = async (req, res) => {
   }
 };
 
+const increaseViewsCount = async (req, res, next) => {
+  try {
+    const postId = req.params.post_id;
+
+    const userId = req.user.id;
+
+    // Find the flat by ID
+    const flat = await Flat.findById(postId);
+
+    const payment = await Payment.findOne({ user: userId, flat: postId });
+
+    if (!flat) {
+      return res.status(404).json({ error: "Flat not found" });
+    }
+
+    // Increment the viewsCount
+    flat.viewersCount = (flat.viewersCount || 0) + 1;
+
+    // Save the updated flat document
+    await flat.save();
+
+    // Determine the isPaid status based on the payment record
+    const isPaid = payment ? payment.isPaid : false;
+
+    // Add the 'isPaid' field to the post data
+    const postData = {
+      ...flat.toObject(),
+      isPaid,
+    };
+
+    // Return the post data
+    res.json({ data: postData });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const getPostById = async (req, res, next) => {
   try {
     const postId = req.params.post_id;
-    console.log(postId);
 
-    const userId = req.user.id; // Assuming you have user authentication in place
-    console.log(userId);
+    const userId = req.user.id;
 
     // Check if there is a payment record matching the user and post
     const payment = await Payment.findOne({ user: userId, flat: postId });
-    console.log(payment);
 
     // Retrieve the post
     const post = await Flat.findById(postId);
@@ -358,4 +393,5 @@ module.exports = {
   bookmarkPost,
   removeBookmark,
   createPayment,
+  increaseViewsCount,
 };

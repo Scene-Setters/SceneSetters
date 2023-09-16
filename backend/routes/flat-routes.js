@@ -40,7 +40,7 @@ router.get("/search", flatController.searchPosts);
 
 router
   .route("/:post_id")
-  .get(flatController.getPostById)
+  .get(flatController.increaseViewsCount, flatController.getPostById)
   .post(flatController.createPayment)
   .delete(flatController.deletePostById);
 
