@@ -16,6 +16,10 @@ TextEditingController price = TextEditingController();
 TextEditingController address = TextEditingController();
 TextEditingController location = TextEditingController();
 TextEditingController description = TextEditingController();
+TextEditingController amenitites = TextEditingController();
+TextEditingController capacity = TextEditingController();
+TextEditingController exactLocation = TextEditingController();
+TextEditingController preferences = TextEditingController();
 
 class _AddRoomState extends State<AddRoom> {
   SizedBox gap() {
@@ -152,6 +156,77 @@ class _AddRoomState extends State<AddRoom> {
                 ),
               ),
               gap(),
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: color,
+                        ),
+                        child: TextFormField(
+                          key: const ValueKey('address'),
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Please enter address';
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                            filled: true,
+                            fillColor: Colors.transparent,
+                            hintText: 'Address',
+                            hintStyle: TextStyle(
+                              fontSize: 15.0,
+                              color: Color.fromARGB(255, 16, 16, 16),
+                            ),
+                            border: InputBorder.none,
+                            contentPadding:
+                                EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
+                          ),
+                          cursorColor: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: color,
+                        ),
+                        child: TextFormField(
+                          key: const ValueKey('location'),
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Please enter location';
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                            filled: true,
+                            fillColor: Colors.transparent,
+                            hintText: 'Location',
+                            hintStyle: TextStyle(
+                              fontSize: 15.0,
+                              color: Color.fromARGB(255, 16, 16, 16),
+                            ),
+                            border: InputBorder.none,
+                            contentPadding:
+                                EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
+                          ),
+                          cursorColor: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              gap(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
                 child: Container(
@@ -160,17 +235,18 @@ class _AddRoomState extends State<AddRoom> {
                     color: color,
                   ),
                   child: TextFormField(
-                    key: const ValueKey('address'),
+                    key: const ValueKey('exact location'),
                     validator: (text) {
                       if (text == null || text.isEmpty) {
-                        return 'Please enter address and location';
+                        return 'Please enter a exact location';
                       }
                       return null;
                     },
+                    maxLines: null,
                     decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.transparent,
-                      hintText: 'Address',
+                      hintText: 'Exact location',
                       hintStyle: TextStyle(
                         fontSize: 15.0,
                         color: Color.fromARGB(255, 16, 16, 16),
@@ -192,17 +268,51 @@ class _AddRoomState extends State<AddRoom> {
                     color: color,
                   ),
                   child: TextFormField(
-                    key: const ValueKey('location'),
+                    key: const ValueKey('amenities'),
                     validator: (text) {
                       if (text == null || text.isEmpty) {
-                        return 'Please enter address and location';
+                        return 'Please enter a amenities';
                       }
                       return null;
                     },
+                    maxLines: null,
                     decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.transparent,
-                      hintText: 'location',
+                      hintText: 'amenities',
+                      hintStyle: TextStyle(
+                        fontSize: 15.0,
+                        color: Color.fromARGB(255, 16, 16, 16),
+                      ),
+                      border: InputBorder.none,
+                      contentPadding:
+                          EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
+                    ),
+                    cursorColor: Colors.black,
+                  ),
+                ),
+              ),
+              gap(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: color,
+                  ),
+                  child: TextFormField(
+                    key: const ValueKey('capacity'),
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Please enter a capacity';
+                      }
+                      return null;
+                    },
+                    maxLines: null,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      hintText: 'capacity',
                       hintStyle: TextStyle(
                         fontSize: 15.0,
                         color: Color.fromARGB(255, 16, 16, 16),
@@ -236,6 +346,39 @@ class _AddRoomState extends State<AddRoom> {
                       filled: true,
                       fillColor: Colors.transparent,
                       hintText: 'Description',
+                      hintStyle: TextStyle(
+                        fontSize: 15.0,
+                        color: Color.fromARGB(255, 16, 16, 16),
+                      ),
+                      border: InputBorder.none,
+                      contentPadding:
+                          EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
+                    ),
+                    cursorColor: Colors.black,
+                  ),
+                ),
+              ),
+              gap(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: color,
+                  ),
+                  child: TextFormField(
+                    key: const ValueKey('preferences'),
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Please enter your preferences ';
+                      }
+                      return null;
+                    },
+                    maxLines: null,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      hintText: 'Preferene',
                       hintStyle: TextStyle(
                         fontSize: 15.0,
                         color: Color.fromARGB(255, 16, 16, 16),
