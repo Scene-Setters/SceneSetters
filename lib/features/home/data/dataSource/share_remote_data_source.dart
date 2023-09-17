@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,10 +78,10 @@ class ShareRemoteDataSource {
       await userSharedPrefs.getUserToken().then(
             (value) => value.fold((l) => null, (r) => token = r!),
           );
-      String rentDetails = '${ApiEndpoints.getAllPostsById}/$id';
+      String shareDetails = '${ApiEndpoints.getAllPostsById}/$id';
 
       var response = await dio.get(
-        rentDetails,
+        shareDetails,
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -104,6 +106,91 @@ class ShareRemoteDataSource {
       return Left(
         Failure(
           error: e.error.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<Either<Failure, bool>> addSharedRooms(ShareEntity share) async {
+    try {
+      String? token;
+      await userSharedPrefs.getUserToken().then(
+            (value) => value.fold((l) => null, (r) => token = r),
+          );
+
+      var response = await dio.post(
+        ApiEndpoints.postSharedRooms,
+        data: {
+          "title": share.title,
+          "description": share.description,
+          "city": share.city,
+          "area": share.area,
+          "longitude": share.longitude,
+          "latitude": share.latitude,
+          "price": share.price,
+          "capacity": share.capacity,
+          "amenities": share.amenities,
+          "preference": share.preference,
+          "photo": share.photos,
+        },
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 201) {
+        return const Right(true);
+      } else {
+        return Left(
+          Failure(
+            error: response.data['message'],
+            statusCode: response.statusCode.toString(),
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(
+        Failure(
+          error: e.message.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<Either<Failure, String>> uploadFlat(
+    File image,
+  ) async {
+    try {
+      String? token;
+      await userSharedPrefs.getUserToken().then(
+            (value) => value.fold((l) => null, (r) => token = r!),
+          );
+      String fileName = image.path.split('/').last;
+      FormData formData = FormData.fromMap(
+        {
+          'photo': await MultipartFile.fromFile(
+            image.path,
+            filename: fileName,
+          ),
+        },
+      );
+
+      Response response = await dio.post(
+        ApiEndpoints.uploadFlatCover,
+        data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      return Right(response.data["data"]);
+    } on DioException catch (e) {
+      return Left(
+        Failure(
+          error: e.error.toString(),
+          statusCode: e.response?.statusCode.toString() ?? '0',
         ),
       );
     }

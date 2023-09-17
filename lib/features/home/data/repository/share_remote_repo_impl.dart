@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sajhasync/features/home/data/dataSource/share_remote_data_source.dart';
@@ -27,5 +29,15 @@ class ShareRemoteRepositoryImpl implements ISharedRepository {
   @override
   Future<Either<Failure, List<ShareEntity>>> getSharedFlatsByUserId(String id) {
     return shareRemoteDataSource.getSharedById(id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> addFlatRooms(ShareEntity share) {
+    return shareRemoteDataSource.addSharedRooms(share);
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadFlat(File file) {
+    return shareRemoteDataSource.uploadFlat(file);
   }
 }

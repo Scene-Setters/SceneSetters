@@ -60,7 +60,8 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 150,
+          toolbarHeight: 120,
+          automaticallyImplyLeading: false,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -140,7 +141,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                             ref
                                 .read(rentViewModelProvider.notifier)
                                 .getRentedFlatsById(
-                                    rentState.rentRooms[index].id);
+                                    rentState.rentRooms[index].id!);
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -149,19 +150,24 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                             ),
                             child: Row(
                               children: [
-                                const SizedBox(
+                                SizedBox(
                                   height: 180,
                                   width: 120,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(15),
                                       bottomLeft: Radius.circular(15),
                                     ),
-                                    child: Image(
-                                      image: AssetImage(
-                                          'images/movies/bansheerin.jpg'),
-                                      fit: BoxFit.cover,
-                                    ),
+                                    child: rentState.rentRooms[index].photos ==
+                                            ''
+                                        ? Image.asset(
+                                            'images/backgrounds/rent.jpg',
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.network(
+                                            rentState.rentRooms[index].photos!,
+                                            fit: BoxFit.cover,
+                                          ),
                                   ),
                                 ),
                                 Expanded(
@@ -272,9 +278,14 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            AppRoute.individual,
+                            AppRoute.shareIndividual,
                             arguments: shareState.shareFlats[index].id,
                           );
+
+                          ref
+                              .read(shareViewModelProvider.notifier)
+                              .getSharedFlatsById(
+                                  shareState.shareFlats[index].id!);
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -286,19 +297,26 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                             ),
                             child: Row(
                               children: [
-                                const SizedBox(
+                                SizedBox(
                                   height: 180,
                                   width: 120,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(15),
                                       bottomLeft: Radius.circular(15),
                                     ),
-                                    child: Image(
-                                      image: AssetImage(
-                                          'images/movies/inster.jpg'),
-                                      fit: BoxFit.cover,
-                                    ),
+                                    child:
+                                        shareState.shareFlats[index].photos ==
+                                                ''
+                                            ? Image.asset(
+                                                'images/backgrounds/rent.jpg',
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.network(
+                                                shareState
+                                                    .shareFlats[index].photos!,
+                                                fit: BoxFit.cover,
+                                              ),
                                   ),
                                 ),
                                 Expanded(

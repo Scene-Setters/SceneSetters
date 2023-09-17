@@ -1,40 +1,38 @@
 import 'package:equatable/equatable.dart';
 
-import 'rent_entity.dart';
-
 class ShareEntity extends Equatable {
-  final String id;
+  final String? id;
   final String title;
   final String description;
   final String city;
   final String area;
-  final String exactLocation;
+  final String longitude;
   final double price;
   final int capacity;
   final List<String> amenities;
-  final List<String> photos;
-  final Owner owner;
-  final String type;
-  final bool isPaid;
-  final int viewersCount;
+  final String? photos;
+  final Owner? owner;
+  final String latitude;
+  final bool? isPaid;
+  final int? viewersCount;
   final bool? isBookmarked;
   final String preference;
 
   const ShareEntity({
-    required this.id,
+    this.id,
     required this.title,
     required this.description,
     required this.city,
     required this.area,
-    required this.exactLocation,
+    required this.longitude,
     required this.price,
     required this.capacity,
     required this.amenities,
-    required this.photos,
-    required this.owner,
-    required this.type,
-    required this.isPaid,
-    required this.viewersCount,
+    this.photos,
+    this.owner,
+    required this.latitude,
+    this.isPaid,
+    this.viewersCount,
     this.isBookmarked,
     required this.preference,
   });
@@ -46,13 +44,13 @@ class ShareEntity extends Equatable {
         description,
         city,
         area,
-        exactLocation,
+        longitude,
         price,
         capacity,
         amenities,
         photos,
         owner,
-        type,
+        latitude,
         isPaid,
         viewersCount,
         isBookmarked,
@@ -66,20 +64,39 @@ class ShareEntity extends Equatable {
           description: '',
           city: '',
           area: '',
-          exactLocation: '',
+          longitude: '',
           price: 0.0,
           capacity: 0,
           amenities: [],
-          photos: [],
+          photos: '',
           owner: const Owner(
             id: '',
             phoneNumber: '',
             fullname: '',
           ),
-          type: '',
+          latitude: '',
           isPaid: false,
           viewersCount: 0,
           isBookmarked: false,
           preference: '',
         );
+}
+
+class Owner extends Equatable {
+  final String id;
+  final String phoneNumber;
+  final String fullname;
+
+  const Owner({
+    required this.id,
+    required this.phoneNumber,
+    required this.fullname,
+  });
+
+  @override
+  List<Object?> get props => [
+        id,
+        phoneNumber,
+        fullname,
+      ];
 }

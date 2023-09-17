@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sajhasync/features/home/domain/entity/rent_entity.dart';
@@ -29,5 +31,13 @@ class RentUseCase {
 
   Future<Either<Failure, bool>> visitRooms(String id) async {
     return await rentRepository.visitRooms(id);
+  }
+
+  Future<Either<Failure, bool>> addRentRooms(RentEntity rent) async {
+    return await rentRepository.addRentRooms(rent);
+  }
+
+  Future<Either<Failure, String>> uploadFlat(File file) async {
+    return await rentRepository.uploadFlat(file);
   }
 }

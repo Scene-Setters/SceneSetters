@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -124,7 +126,6 @@ class RentRemoteDataSource {
       );
 
       if (response.statusCode == 200) {
-        // Review added successfully
         return const Right(true);
       } else {
         return Left(
@@ -138,6 +139,91 @@ class RentRemoteDataSource {
       return Left(
         Failure(
           error: e.message.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<Either<Failure, bool>> addRentRooms(RentEntity rent) async {
+    try {
+      String? token;
+      await userSharedPrefs.getUserToken().then(
+            (value) => value.fold((l) => null, (r) => token = r),
+          );
+
+      var response = await dio.post(
+        ApiEndpoints.postRentedRooms,
+        data: {
+          "title": rent.title,
+          "description": rent.description,
+          "city": rent.city,
+          "area": rent.area,
+          "longitude": rent.longitude,
+          "latitude": rent.latitude,
+          "price": rent.price,
+          "capacity": rent.capacity,
+          "amenities": rent.amenities,
+          "preference": rent.preference,
+          "photo": rent.photos,
+        },
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 201) {
+        return const Right(true);
+      } else {
+        return Left(
+          Failure(
+            error: response.data['message'],
+            statusCode: response.statusCode.toString(),
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(
+        Failure(
+          error: e.message.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<Either<Failure, String>> uploadFlat(
+    File image,
+  ) async {
+    try {
+      String? token;
+      await userSharedPrefs.getUserToken().then(
+            (value) => value.fold((l) => null, (r) => token = r!),
+          );
+      String fileName = image.path.split('/').last;
+      FormData formData = FormData.fromMap(
+        {
+          'photo': await MultipartFile.fromFile(
+            image.path,
+            filename: fileName,
+          ),
+        },
+      );
+
+      Response response = await dio.post(
+        ApiEndpoints.uploadFlatCover,
+        data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      return Right(response.data["data"]);
+    } on DioException catch (e) {
+      return Left(
+        Failure(
+          error: e.error.toString(),
+          statusCode: e.response?.statusCode.toString() ?? '0',
         ),
       );
     }

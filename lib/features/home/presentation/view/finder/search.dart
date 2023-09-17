@@ -15,9 +15,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   String searchText = '';
   List<String> recentSearches = [];
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
-
   // Function to reload the data when the user triggers a refresh.
 
   @override
@@ -153,10 +150,16 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(
                                     isTablet ? 30.0 : 10.0),
-                                child: const Image(
-                                  image: AssetImage(
-                                      'images/backgrounds/noInfo.png'),
-                                ),
+                                child: searchStat.searchFlats[index].photos ==
+                                        ''
+                                    ? const Image(
+                                        image: AssetImage(
+                                            'images/backgrounds/rent.jpg'),
+                                      )
+                                    : Image.network(
+                                        searchStat.searchFlats[index].photos!,
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                             ),
                             title: Text(

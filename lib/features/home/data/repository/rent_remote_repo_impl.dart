@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sajhasync/features/home/data/dataSource/rent_remote_data_source.dart';
@@ -32,5 +34,15 @@ class RentRemoteRepositoryImpl implements IRentRepository {
   @override
   Future<Either<Failure, bool>> visitRooms(String id) {
     return rentremoteDataSource.visitRoom(id);
+  }
+
+  @override
+  Future<Either<Failure, bool>> addRentRooms(RentEntity rent) {
+    return rentremoteDataSource.addRentRooms(rent);
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadFlat(File file) {
+    return rentremoteDataSource.uploadFlat(file);
   }
 }

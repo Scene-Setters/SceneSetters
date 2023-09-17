@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sajhasync/features/home/domain/entity/rent_entity.dart';
@@ -15,4 +17,6 @@ abstract class IRentRepository {
   Future<Either<Failure, List<RentEntity>>> getRentedFlats();
   Future<Either<Failure, List<RentEntity>>> getRentedFlatsByUserId(String id);
   Future<Either<Failure, bool>> visitRooms(String id);
+  Future<Either<Failure, bool>> addRentRooms(RentEntity rent);
+  Future<Either<Failure, String>> uploadFlat(File file);
 }

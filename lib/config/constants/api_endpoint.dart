@@ -11,11 +11,12 @@ class ApiEndpoints {
   static const String register = "users/register";
   static const String verifyUser = "users/";
   static const String changePassword = "users/change-password";
-  static const String uploadImage = "users/uploadImage";
+  static const String uploadFlatCover = "flats/uploadPostCover";
   static const String updateProfile = "users/edit-profile";
 
   //======================== Rent Routes =====================
   static const String getRentedRooms = "flats/rent";
+  static const String postRentedRooms = "flats/rent";
   // static const String getPopularMovies = "movies/popular";
   // static const String getTopRatedMovies = "movies/top_rated";
   // static const String getMovieDetails = "movies/";
@@ -23,6 +24,7 @@ class ApiEndpoints {
   //======================== Share Routes =====================
 
   static const String getSharedRooms = "flats/share";
+  static const String postSharedRooms = "flats/share";
   static const String getAllPostsById = 'flats';
   // static const String likeReview = "/like";
   // static const String dislikeReview = "/unlike";

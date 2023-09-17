@@ -16,13 +16,13 @@ class RentApiModel extends Equatable {
   final String description;
   final String city;
   final String area;
-  final String exactLocation;
+  final String longitude;
   final double price;
   final int capacity;
   final List<String> amenities;
-  final List<String> photos;
+  final String? photos;
   final OwnerApiModel owner;
-  final String type;
+  final String latitude;
   final bool isPaid;
   final int viewersCount;
   final bool? isBookmarked;
@@ -34,13 +34,13 @@ class RentApiModel extends Equatable {
     required this.description,
     required this.city,
     required this.area,
-    required this.exactLocation,
+    required this.longitude,
     required this.price,
     required this.capacity,
     required this.amenities,
-    required this.photos,
+    this.photos,
     required this.owner,
-    required this.type,
+    required this.latitude,
     required this.isPaid,
     required this.viewersCount,
     this.isBookmarked,
@@ -58,17 +58,17 @@ class RentApiModel extends Equatable {
         description: '',
         city: '',
         area: '',
-        exactLocation: '',
+        longitude: '',
         price: 0.0,
         capacity: 0,
         amenities: [],
-        photos: [],
+        photos: '',
         owner: OwnerApiModel(
           id: '',
           phoneNumber: '',
           fullname: '',
         ),
-        type: '',
+        latitude: '',
         isPaid: false,
         viewersCount: 0,
         isBookmarked: false,
@@ -81,17 +81,17 @@ class RentApiModel extends Equatable {
         description: description,
         city: city,
         area: area,
-        exactLocation: exactLocation,
+        longitude: longitude,
         price: price,
         capacity: capacity,
         amenities: amenities,
-        photos: photos,
+        photos: photos ?? '',
         owner: Owner(
           id: owner.id,
           phoneNumber: owner.phoneNumber,
           fullname: owner.fullname,
         ),
-        type: type,
+        latitude: latitude,
         isPaid: isPaid,
         viewersCount: viewersCount,
         isBookmarked: isBookmarked,
@@ -99,24 +99,24 @@ class RentApiModel extends Equatable {
       );
 
   RentApiModel fromEntity(RentEntity entity) => RentApiModel(
-        id: entity.id,
+        id: entity.id!,
         title: entity.title,
         description: entity.description,
         city: entity.city,
         area: entity.area,
-        exactLocation: entity.exactLocation,
+        longitude: entity.longitude,
         price: entity.price,
         capacity: entity.capacity,
         amenities: entity.amenities,
         photos: entity.photos,
         owner: OwnerApiModel(
-          id: entity.owner.id,
-          phoneNumber: entity.owner.phoneNumber,
-          fullname: entity.owner.fullname,
+          id: entity.owner!.id,
+          phoneNumber: entity.owner!.phoneNumber,
+          fullname: entity.owner!.fullname,
         ),
-        type: entity.type,
-        isPaid: entity.isPaid,
-        viewersCount: entity.viewersCount,
+        latitude: entity.latitude,
+        isPaid: entity.isPaid!,
+        viewersCount: entity.viewersCount!,
         isBookmarked: entity.isBookmarked,
         preference: entity.preference,
       );
@@ -128,13 +128,13 @@ class RentApiModel extends Equatable {
         description,
         city,
         area,
-        exactLocation,
+        longitude,
         price,
         capacity,
         amenities,
         photos,
         owner,
-        type,
+        latitude,
         isPaid,
         viewersCount,
         isBookmarked,

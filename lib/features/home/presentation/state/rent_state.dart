@@ -4,6 +4,7 @@ class RentState {
   final bool isLoading;
   final List<RentEntity> rentRooms;
   final List<RentEntity> rentRoomsByUserId;
+  final String? imageName;
 
   final String? error;
 
@@ -12,6 +13,7 @@ class RentState {
     required this.rentRooms,
     required this.rentRoomsByUserId,
     required this.error,
+    this.imageName,
   });
 
   factory RentState.initial() {
@@ -19,6 +21,7 @@ class RentState {
       isLoading: false,
       rentRooms: [],
       rentRoomsByUserId: [],
+      imageName: null,
       error: null,
     );
   }
@@ -28,12 +31,14 @@ class RentState {
     final List<RentEntity>? rentRooms,
     final List<RentEntity>? rentRoomsByUserId,
     String? error,
+    String? imageName,
   }) {
     return RentState(
       isLoading: isLoading ?? this.isLoading,
       rentRooms: rentRooms ?? this.rentRooms,
       rentRoomsByUserId: rentRoomsByUserId ?? this.rentRoomsByUserId,
       error: error ?? this.error,
+      imageName: imageName ?? this.imageName,
     );
   }
 }

@@ -1,30 +1,34 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sajhasync/features/home/domain/entity/rent_entity.dart';
+import 'package:sajhasync/features/home/presentation/viewmodel/profile_view_model.dart';
+import 'package:sajhasync/features/home/presentation/viewmodel/rent_view_model.dart';
 
-class AddRoom extends StatefulWidget {
+class AddRoom extends ConsumerStatefulWidget {
   const AddRoom({
     Key? key, // Remove super.key here
   }) : super(key: key);
 
   @override
-  State<AddRoom> createState() => _AddRoomState();
+  ConsumerState<AddRoom> createState() => _AddRoomState();
 }
 
 TextEditingController title = TextEditingController();
 TextEditingController price = TextEditingController();
-TextEditingController address = TextEditingController();
-TextEditingController location = TextEditingController();
 TextEditingController description = TextEditingController();
 TextEditingController amenitites = TextEditingController();
 TextEditingController capacity = TextEditingController();
 TextEditingController exactLocation = TextEditingController();
 TextEditingController preferences = TextEditingController();
+TextEditingController city = TextEditingController();
 
-class _AddRoomState extends State<AddRoom> {
+class _AddRoomState extends ConsumerState<AddRoom> {
   SizedBox gap() {
     return const SizedBox(
       height: 10,
@@ -32,8 +36,29 @@ class _AddRoomState extends State<AddRoom> {
   }
 
   String? placeName;
+  checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.request().isDenied) {
+      await Permission.camera.request();
+    }
+  }
 
-  File? _image;
+  File? _img;
+  Future _browseImage(WidgetRef ref, ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          _img = File(image.path);
+          ref.read(rentViewModelProvider.notifier).uploadFlat(_img!);
+        });
+      } else {
+        return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   bool isChecked = false;
   // Track whether the user agreed to terms
@@ -137,43 +162,22 @@ class _AddRoomState extends State<AddRoom> {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 150,
-        title: Column(
+        toolbarHeight: 100,
+        title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 45),
-              child: Column(
-                children: [
-                  const Row(
-                    children: [
-                      SizedBox(
-                        width: 250,
-                      ),
-                    ],
-                  ),
-                  gap(),
-                  const Column(
-                    children: [
-                      Text(
-                        'List new room/flats ',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'List in the market where listers are waiting ',
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 12,
-                            color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ],
+            Text(
+              'Rent room/flats ',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
+            ),
+            Text(
+              'List in the market where listers are waiting ',
+              style: TextStyle(
+                  fontFamily: 'Poppins', fontSize: 12, color: Colors.grey),
             ),
           ],
         ),
@@ -189,19 +193,48 @@ class _AddRoomState extends State<AddRoom> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
-                      child: GestureDetector(
-                        onTap: () async {
-                          final ImagePicker picker = ImagePicker();
-                          final XFile? image = await picker.pickImage(
-                              source: ImageSource
-                                  .gallery); // You can use ImageSource.camera for the camera
-
-                          if (image != null) {
-                            setState(() {
-                              // Assign the selected image to the _image variable
-                              _image = File(image.path);
-                            });
-                          }
+                      child: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            backgroundColor: Colors.grey[300],
+                            context: context,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            builder: (context) => Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      checkCameraPermission();
+                                      _browseImage(ref, ImageSource.camera);
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(Icons.camera),
+                                    label: const Text('Camera'),
+                                  ),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      _browseImage(ref, ImageSource.gallery);
+                                      Navigator.pop(context);
+                                      ref
+                                          .watch(
+                                              profileViewModelProvider.notifier)
+                                          .getUserProfile();
+                                    },
+                                    icon: const Icon(Icons.image),
+                                    label: const Text('Gallery'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
                         },
                         child: Container(
                           width: double.infinity,
@@ -213,7 +246,7 @@ class _AddRoomState extends State<AddRoom> {
                             ),
                             borderRadius: BorderRadius.circular(20.0),
                           ),
-                          child: _image == null
+                          child: _img == null
                               ? const Center(
                                   child: SingleChildScrollView(
                                     child: Column(
@@ -238,7 +271,7 @@ class _AddRoomState extends State<AddRoom> {
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(20.0),
                                   child: Image.file(
-                                    _image!,
+                                    _img!,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -257,6 +290,7 @@ class _AddRoomState extends State<AddRoom> {
                       color: color,
                     ),
                     child: TextFormField(
+                      controller: title,
                       key: const ValueKey('title'),
                       validator: (text) {
                         if (text == null || text.isEmpty) {
@@ -281,6 +315,112 @@ class _AddRoomState extends State<AddRoom> {
                   ),
                 ),
                 gap(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: color,
+                          ),
+                          child: TextFormField(
+                            key: const ValueKey('Capacity'),
+                            controller: capacity,
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Please enter capacity';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.transparent,
+                              hintText: 'Capacity',
+                              hintStyle: TextStyle(
+                                fontSize: 15.0,
+                                color: Color.fromARGB(255, 16, 16, 16),
+                              ),
+                              border: InputBorder.none,
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
+                            ),
+                            cursorColor: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: color,
+                          ),
+                          child: TextFormField(
+                            controller: price,
+                            key: const ValueKey('Rent'),
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Please enter rent';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.transparent,
+                              hintText: 'Rent',
+                              hintStyle: TextStyle(
+                                fontSize: 15.0,
+                                color: Color.fromARGB(255, 16, 16, 16),
+                              ),
+                              border: InputBorder.none,
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
+                            ),
+                            cursorColor: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // gap(),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(10.0),
+                //       color: color,
+                //     ),
+                //     child: TextFormField(
+                //       key: const ValueKey('City'),
+                //       validator: (text) {
+                //         if (text == null || text.isEmpty) {
+                //           return 'Please enter your city';
+                //         }
+                //         return null;
+                //       },
+                //       maxLines: null,
+                //       decoration: const InputDecoration(
+                //         filled: true,
+                //         fillColor: Colors.transparent,
+                //         hintText: 'City',
+                //         hintStyle: TextStyle(
+                //           fontSize: 15.0,
+                //           color: Color.fromARGB(255, 16, 16, 16),
+                //         ),
+                //         border: InputBorder.none,
+                //         contentPadding:
+                //             EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
+                //       ),
+                //       cursorColor: Colors.black,
+                //     ),
+                //   ),
+                // ),
+                gap(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
                   child: Container(
@@ -289,17 +429,19 @@ class _AddRoomState extends State<AddRoom> {
                       color: color,
                     ),
                     child: TextFormField(
-                      key: const ValueKey('price'),
+                      controller: amenitites,
+                      key: const ValueKey('Amenities'),
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return 'please enter the price ';
+                          return 'Please enter a amenities';
                         }
                         return null;
                       },
+                      maxLines: null,
                       decoration: const InputDecoration(
                         filled: true,
                         fillColor: Colors.transparent,
-                        hintText: 'price',
+                        hintText: 'Amenities',
                         hintStyle: TextStyle(
                           fontSize: 15.0,
                           color: Color.fromARGB(255, 16, 16, 16),
@@ -324,17 +466,18 @@ class _AddRoomState extends State<AddRoom> {
                             color: color,
                           ),
                           child: TextFormField(
-                            key: const ValueKey('address'),
+                            controller: city,
+                            key: const ValueKey('City'),
                             validator: (text) {
                               if (text == null || text.isEmpty) {
-                                return 'Please enter address';
+                                return 'Please enter your city';
                               }
                               return null;
                             },
                             decoration: const InputDecoration(
                               filled: true,
                               fillColor: Colors.transparent,
-                              hintText: 'Address',
+                              hintText: 'City',
                               hintStyle: TextStyle(
                                 fontSize: 15.0,
                                 color: Color.fromARGB(255, 16, 16, 16),
@@ -357,17 +500,18 @@ class _AddRoomState extends State<AddRoom> {
                             color: color,
                           ),
                           child: TextFormField(
-                            key: const ValueKey('location'),
+                            controller: preferences,
+                            key: const ValueKey('Preference'),
                             validator: (text) {
                               if (text == null || text.isEmpty) {
-                                return 'Please enter location';
+                                return 'Please enter preference';
                               }
                               return null;
                             },
                             decoration: const InputDecoration(
                               filled: true,
                               fillColor: Colors.transparent,
-                              hintText: 'Location',
+                              hintText: 'Preference',
                               hintStyle: TextStyle(
                                 fontSize: 15.0,
                                 color: Color.fromARGB(255, 16, 16, 16),
@@ -392,105 +536,7 @@ class _AddRoomState extends State<AddRoom> {
                       color: color,
                     ),
                     child: TextFormField(
-                      key: const ValueKey('exact location'),
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Please enter a exact location';
-                        }
-                        return null;
-                      },
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.transparent,
-                        hintText: 'Exact location',
-                        hintStyle: TextStyle(
-                          fontSize: 15.0,
-                          color: Color.fromARGB(255, 16, 16, 16),
-                        ),
-                        border: InputBorder.none,
-                        contentPadding:
-                            EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
-                      ),
-                      cursorColor: Colors.black,
-                    ),
-                  ),
-                ),
-                gap(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: color,
-                    ),
-                    child: TextFormField(
-                      key: const ValueKey('amenities'),
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Please enter a amenities';
-                        }
-                        return null;
-                      },
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.transparent,
-                        hintText: 'amenities',
-                        hintStyle: TextStyle(
-                          fontSize: 15.0,
-                          color: Color.fromARGB(255, 16, 16, 16),
-                        ),
-                        border: InputBorder.none,
-                        contentPadding:
-                            EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
-                      ),
-                      cursorColor: Colors.black,
-                    ),
-                  ),
-                ),
-                gap(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: color,
-                    ),
-                    child: TextFormField(
-                      key: const ValueKey('capacity'),
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Please enter a capacity';
-                        }
-                        return null;
-                      },
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.transparent,
-                        hintText: 'capacity',
-                        hintStyle: TextStyle(
-                          fontSize: 15.0,
-                          color: Color.fromARGB(255, 16, 16, 16),
-                        ),
-                        border: InputBorder.none,
-                        contentPadding:
-                            EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
-                      ),
-                      cursorColor: Colors.black,
-                    ),
-                  ),
-                ),
-                gap(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: color,
-                    ),
-                    child: TextFormField(
+                      controller: description,
                       key: const ValueKey('description'),
                       validator: (text) {
                         if (text == null || text.isEmpty) {
@@ -517,45 +563,6 @@ class _AddRoomState extends State<AddRoom> {
                 ),
 
                 gap(),
-
-                // Map for selecting location
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: color,
-                    ),
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          key: const ValueKey('preferences'),
-                          validator: (text) {
-                            if (text == null || text.isEmpty) {
-                              return 'Please enter your preferences ';
-                            }
-                            return null;
-                          },
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: Colors.transparent,
-                            hintText: 'Preference',
-                            hintStyle: TextStyle(
-                              fontSize: 15.0,
-                              color: Color.fromARGB(255, 16, 16, 16),
-                            ),
-                            border: InputBorder.none,
-                            contentPadding:
-                                EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 20.0),
-                          ),
-                          cursorColor: Colors.black,
-                        ),
-                        // Add some spacing
-                      ],
-                    ),
-                  ),
-                ),
 
                 if (selectedLocation != null)
                   Text(
@@ -681,7 +688,36 @@ class _AddRoomState extends State<AddRoom> {
                         color: Colors.green,
                       ),
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (pinkey.currentState!.validate()) {
+                            var rent = RentEntity(
+                              title: title.text,
+                              price: double.parse(price.text),
+                              description: description.text,
+                              amenities:
+                                  List<String>.from(amenitites.text.split(",")),
+                              capacity: int.parse(capacity.text),
+                              longitude: selectedLocation!.longitude.toString(),
+                              latitude: selectedLocation!.latitude.toString(),
+                              preference: preferences.text,
+                              city: city.text,
+                              area: placeName!,
+                              photos: '',
+                            );
+                            ref
+                                .read(rentViewModelProvider.notifier)
+                                .addRentRooms(rent, context);
+
+                            title.clear();
+                            price.clear();
+                            description.clear();
+                            amenitites.clear();
+                            capacity.clear();
+                            exactLocation.clear();
+                            preferences.clear();
+                            city.clear();
+                          }
+                        },
                         child: const Text(
                           'Submit',
                           style: TextStyle(

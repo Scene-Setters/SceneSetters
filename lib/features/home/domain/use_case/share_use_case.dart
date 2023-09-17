@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sajhasync/features/home/domain/entity/share_entity.dart';
@@ -25,5 +27,13 @@ class ShareUseCase {
   Future<Either<Failure, List<ShareEntity>>> getSharedFlatsByUserId(
       String id) async {
     return await sharedRepository.getSharedFlatsByUserId(id);
+  }
+
+  Future<Either<Failure, bool>> addFlatRooms(ShareEntity share) async {
+    return await sharedRepository.addFlatRooms(share);
+  }
+
+  Future<Either<Failure, String>> uploadFlat(File file) async {
+    return await sharedRepository.uploadFlat(file);
   }
 }

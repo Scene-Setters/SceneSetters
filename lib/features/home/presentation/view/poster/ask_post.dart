@@ -23,63 +23,95 @@ class _AskPosterState extends ConsumerState<AskPoster> {
           ),
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: GestureDetector(
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/backgrounds/filmcratesplash.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoute.shareRoom);
+              },
+              child: Container(
+                height: 80,
+                width: 350,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                  color: AppColors.bodyColors,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.animation_outlined,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Post your room for sharing?',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 18,
+                        color: AppColors.appbarColors,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, AppRoute.addRoom);
               },
               child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.bodyColors,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                height: 100,
+                height: 80,
                 width: 350,
-                child: Center(
-                  child: Text(
-                    'Put your flat up for sharing?',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppColors.appbarColors,
-                      fontFamily: 'Hind',
-                      fontSize: 25,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                  color: AppColors.bodyColors,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.animation_outlined,
+                      color: Colors.white,
                     ),
-                  ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Post your room for rent?',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 18,
+                        color: AppColors.appbarColors,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.bodyColors,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              height: 100,
-              width: 350,
-              child: Center(
-                child: Text(
-                  'Put your room/flat for rent?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: AppColors.appbarColors,
-                    fontFamily: 'Hind',
-                    fontSize: 25,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

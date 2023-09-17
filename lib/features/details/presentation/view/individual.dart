@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sajhasync/core/common/snackbar/my_snackbar.dart';
+import 'package:sajhasync/features/home/presentation/viewmodel/share_view_model.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../../config/constants/app_color_theme.dart';
 import '../../../home/presentation/viewmodel/rent_view_model.dart';
@@ -19,8 +22,28 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(rentViewModelProvider.notifier).getRentedFlats();
+      ref.read(shareViewModelProvider.notifier).getSharedFlats();
     });
     super.initState();
+  }
+
+  bool _showVideoPlayer = false;
+
+  final YoutubePlayerController _youtubeController = YoutubePlayerController(
+    initialVideoId: 'ROxyH3Ygdw8',
+    flags: const YoutubePlayerFlags(
+      autoPlay: true, // Auto-play the video when the page is opened
+    ),
+  );
+
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+
+  // Function to reload the data when the user triggers a refresh.
+  Future<void> _handleRefresh() async {
+    // Implement the logic to reload the data here.
+    ref.watch(rentViewModelProvider.notifier).getRentedFlats();
+    ref.watch(shareViewModelProvider.notifier).getSharedFlats();
   }
 
   @override
@@ -57,19 +80,22 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                 expandedHeight: constraints.maxHeight * 0.4,
                 pinned: true,
                 backgroundColor: Colors.black,
-                // shape: const ContinuousRectangleBorder(
-                //   borderRadius: BorderRadius.only(
-                //     bottomLeft: Radius.circular(100.0),
-                //     bottomRight: Radius.circular(100.0),
-                //   ),
-                // ),
-                flexibleSpace: const FlexibleSpaceBar(
-                  background: Image(
-                    image: AssetImage('images/movies/bansheerin.jpg'),
-                    fit: BoxFit.cover,
-                  ),
+                flexibleSpace: FlexibleSpaceBar(
+                  background: _showVideoPlayer
+                      ? YoutubePlayer(
+                          controller: _youtubeController,
+                          showVideoProgressIndicator: true,
+                        )
+                      : screenState.rentRoomsByUserId[0].photos == ''
+                          ? Image.asset(
+                              'images/backgrounds/rent.jpg',
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              screenState.rentRoomsByUserId[0].photos!,
+                              fit: BoxFit.cover,
+                            ),
                 ),
-                // actions: <Widget>[
               ),
               SliverToBoxAdapter(
                 child: Column(
@@ -82,7 +108,11 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                           padding: const EdgeInsets.only(
                               top: 20, bottom: 10, left: 20, right: 20),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                _showVideoPlayer = true;
+                              });
+                            },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.blue.withOpacity(0.7),
                               backgroundColor: Colors.black.withOpacity(0.1),
@@ -140,7 +170,7 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  screenState.rentRoomsByUserId[0].area,
+                                  screenState.rentRoomsByUserId[0].city,
                                   style: const TextStyle(
                                     fontSize: 15,
                                     fontFamily: 'Poppins',
@@ -151,7 +181,6 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                             ],
                           ),
                         ),
-
                         Padding(
                           padding: const EdgeInsets.only(
                               top: 4, bottom: 5, left: 20, right: 20),
@@ -172,18 +201,19 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                             ],
                           ),
                         ),
-
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 22, right: 20, top: 10, bottom: 5),
-                          child: Text(
-                            screenState.rentRoomsByUserId[0].description,
-                            style: const TextStyle(
-                              fontFamily: 'Poppins',
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              screenState.rentRoomsByUserId[0].description,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                              ),
                             ),
                           ),
                         ),
-
                         const Padding(
                           padding: EdgeInsets.only(
                               top: 7, bottom: 8, left: 20, right: 20),
@@ -195,7 +225,6 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                             ),
                           ),
                         ),
-
                         Container(
                           padding: const EdgeInsets.only(
                               top: 5, bottom: 10, left: 20, right: 20),
@@ -206,6 +235,7 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                 backgroundImage: AssetImage(
                                     'images/movies/bansheerin.jpg'), // Replace with your image URL
                               ),
+
                               const SizedBox(
                                   width:
                                       10.0), // Add spacing between the image and text
@@ -213,7 +243,7 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    screenState.rentRoomsByUserId[0].owner
+                                    screenState.rentRoomsByUserId[0].owner!
                                         .fullname, // Replace with the profile name
                                     style: const TextStyle(
                                       fontSize:
@@ -230,7 +260,6 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                             ],
                           ),
                         ),
-
                         screenState.rentRoomsByUserId[0].isPaid == true
                             ? Padding(
                                 padding: const EdgeInsets.only(
@@ -250,7 +279,7 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                         ),
                                       ),
                                       Text(
-                                        screenState.rentRoomsByUserId[0].owner
+                                        screenState.rentRoomsByUserId[0].owner!
                                             .phoneNumber,
                                         style: const TextStyle(
                                           fontFamily: 'Poppins',
@@ -269,8 +298,7 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                         ),
                                       ),
                                       Text(
-                                        screenState
-                                            .rentRoomsByUserId[0].exactLocation,
+                                        screenState.rentRoomsByUserId[0].area,
                                         style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 15,
@@ -281,7 +309,6 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                 ),
                               )
                             : Container(),
-
                         Padding(
                           padding: const EdgeInsets.only(
                               top: 8, bottom: 8, left: 30),
@@ -320,9 +347,10 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                             .join(
                                                 ', '), // Replace with the profile name
                                         style: const TextStyle(
-                                          fontSize: 15.0,
-                                          fontFamily:
-                                              'Poppins', // Adjust the font size as needed
+                                          fontSize: 14.0,
+                                          fontFamily: 'Poppins',
+                                          overflow: TextOverflow
+                                              .ellipsis, // Adjust the font size as needed
                                         ),
                                       ),
                                     ],
@@ -347,45 +375,93 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                   fontFamily: 'Poppins',
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 20),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    ref
-                                        .watch(rentViewModelProvider.notifier)
-                                        .visitRooms(screenState
-                                            .rentRoomsByUserId[0].id);
+                              screenState.rentRoomsByUserId[0].isPaid == true
+                                  ? const SizedBox(
+                                      width: 0,
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.only(right: 20),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          ref
+                                              .watch(rentViewModelProvider
+                                                  .notifier)
+                                              .visitRooms(screenState
+                                                  .rentRoomsByUserId[0].id!);
 
-                                    showSnackBar(
-                                        message: 'Your payment was succesful',
-                                        context: context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    elevation:
-                                        50, // Set the text color with reduced opacity
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      side:
-                                          const BorderSide(color: Colors.black),
+                                          showSnackBar(
+                                              message:
+                                                  'Your payment was succesful',
+                                              context: context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          elevation:
+                                              50, // Set the text color with reduced opacity
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            side: const BorderSide(
+                                                color: Colors.black),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 15, horizontal: 15),
+                                        ),
+                                        child: const Text(
+                                          'Reveal details',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 13,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 15, horizontal: 15),
-                                  ),
-                                  child: const Text(
-                                    'Visit for details',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontFamily: 'Poppins',
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),
-
-                        // Divider
+                        const Padding(
+                          padding: EdgeInsets.only(
+                              top: 7, bottom: 8, left: 20, right: 20),
+                          child: Opacity(
+                            opacity: 0.2,
+                            child: Divider(
+                              color: Colors.black,
+                              thickness: 1,
+                            ),
+                          ),
+                        ),
+                        screenState.rentRoomsByUserId[0].isPaid == true
+                            ? const SizedBox(
+                                height: 200, // Adjust the height as needed
+                                child: MapWidget(
+                                  latitude: 27.716826,
+                                  longitude: 85.327432,
+                                ),
+                              )
+                            : Container(),
+                        screenState.rentRoomsByUserId[0].isPaid == true
+                            ? Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15, top: 10, bottom: 15, right: 15),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.red),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Please visit the property and meet the owner in person before renting. Your safety is paramount, so exercise caution, conduct due diligence, and report any concerns to us promptly. Thank you for using SajhaSync!!",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                   ],
@@ -395,6 +471,46 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
           );
         },
       ),
+    );
+  }
+}
+
+class MapWidget extends StatefulWidget {
+  final double latitude;
+  final double longitude;
+
+  const MapWidget({super.key, required this.latitude, required this.longitude});
+
+  @override
+  _MapWidgetState createState() => _MapWidgetState();
+}
+
+class _MapWidgetState extends State<MapWidget> {
+  late GoogleMapController mapController;
+
+  @override
+  Widget build(BuildContext context) {
+    return GoogleMap(
+      onMapCreated: (controller) {
+        setState(() {
+          mapController = controller;
+          final LatLng location = LatLng(widget.latitude, widget.longitude);
+          mapController.animateCamera(
+            CameraUpdate.newLatLngZoom(location, 14.0),
+          );
+        });
+      },
+      initialCameraPosition: CameraPosition(
+        target: LatLng(widget.latitude, widget.longitude),
+        zoom: 14.0,
+      ),
+      markers: {
+        Marker(
+          markerId: const MarkerId('staticMarker'),
+          position: LatLng(widget.latitude, widget.longitude),
+          infoWindow: const InfoWindow(title: 'Static Location'),
+        ),
+      },
     );
   }
 }

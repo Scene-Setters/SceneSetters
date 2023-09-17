@@ -17,13 +17,13 @@ class SearchApiModel extends Equatable {
   final String description;
   final String city;
   final String area;
-  final String exactLocation;
+  final String longitude;
   final double price;
   final int capacity;
   final List<String> amenities;
-  final List<String> photos;
+  final String? photos;
   final OwnerApiModel owner;
-  final String type;
+  final String latitude;
   final bool isPaid;
   final int viewersCount;
   final bool? isBookmarked;
@@ -35,13 +35,13 @@ class SearchApiModel extends Equatable {
     required this.description,
     required this.city,
     required this.area,
-    required this.exactLocation,
+    required this.longitude,
     required this.price,
     required this.capacity,
     required this.amenities,
-    required this.photos,
+    this.photos,
     required this.owner,
-    required this.type,
+    required this.latitude,
     required this.isPaid,
     required this.viewersCount,
     this.isBookmarked,
@@ -59,17 +59,17 @@ class SearchApiModel extends Equatable {
         description: '',
         city: '',
         area: '',
-        exactLocation: '',
+        longitude: '',
         price: 0.0,
         capacity: 0,
         amenities: [],
-        photos: [],
+        photos: '',
         owner: OwnerApiModel(
           id: '',
           phoneNumber: '',
           fullname: '',
         ),
-        type: '',
+        latitude: '',
         isPaid: false,
         viewersCount: 0,
         isBookmarked: false,
@@ -82,17 +82,17 @@ class SearchApiModel extends Equatable {
         description: description,
         city: city,
         area: area,
-        exactLocation: exactLocation,
+        longitude: longitude,
         price: price,
         capacity: capacity,
         amenities: amenities,
-        photos: photos,
+        photos: photos ?? '',
         owner: Owner(
           id: owner.id,
           phoneNumber: owner.phoneNumber,
           fullname: owner.fullname,
         ),
-        type: type,
+        latitude: latitude,
         isPaid: isPaid,
         viewersCount: viewersCount,
         isBookmarked: isBookmarked,
@@ -105,7 +105,7 @@ class SearchApiModel extends Equatable {
         description: entity.description,
         city: entity.city,
         area: entity.area,
-        exactLocation: entity.exactLocation,
+        longitude: entity.longitude,
         price: entity.price,
         capacity: entity.capacity,
         amenities: entity.amenities,
@@ -115,7 +115,7 @@ class SearchApiModel extends Equatable {
           phoneNumber: entity.owner.phoneNumber,
           fullname: entity.owner.fullname,
         ),
-        type: entity.type,
+        latitude: entity.latitude,
         isPaid: entity.isPaid,
         viewersCount: entity.viewersCount,
         isBookmarked: entity.isBookmarked,
@@ -129,13 +129,13 @@ class SearchApiModel extends Equatable {
         description,
         city,
         area,
-        exactLocation,
+        longitude,
         price,
         capacity,
         amenities,
         photos,
         owner,
-        type,
+        latitude,
         isPaid,
         viewersCount,
         isBookmarked,
