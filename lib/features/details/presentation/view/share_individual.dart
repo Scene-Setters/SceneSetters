@@ -27,15 +27,6 @@ class _ShareIndividualViewState extends ConsumerState<ShareIndividualView> {
     super.initState();
   }
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
-
-  // Function to reload the data when the user triggers a refresh.
-  Future<void> _handleRefresh() async {
-    // Implement the logic to reload the data here.
-    ref.watch(shareViewModelProvider.notifier).getSharedFlats();
-  }
-
   @override
   Widget build(BuildContext context) {
     var screenState = ref.watch(shareViewModelProvider);

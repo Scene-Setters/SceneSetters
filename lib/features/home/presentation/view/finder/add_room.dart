@@ -62,7 +62,6 @@ class _AddRoomState extends ConsumerState<AddRoom> {
 
   bool isChecked = false;
   // Track whether the user agreed to terms
-  final bool _isObscure = true;
   double? latitude;
   double? longitude; // Define it as nullable
 

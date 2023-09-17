@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sajhasync/config/router/app_route.dart';
 import 'package:sajhasync/core/common/snackbar/my_snackbar.dart';
 import 'package:sajhasync/features/home/presentation/viewmodel/share_view_model.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -30,21 +31,11 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
   bool _showVideoPlayer = false;
 
   final YoutubePlayerController _youtubeController = YoutubePlayerController(
-    initialVideoId: 'ROxyH3Ygdw8',
+    initialVideoId: 'KW2MVMj5ke8',
     flags: const YoutubePlayerFlags(
       autoPlay: true, // Auto-play the video when the page is opened
     ),
   );
-
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
-
-  // Function to reload the data when the user triggers a refresh.
-  Future<void> _handleRefresh() async {
-    // Implement the logic to reload the data here.
-    ref.watch(rentViewModelProvider.notifier).getRentedFlats();
-    ref.watch(shareViewModelProvider.notifier).getSharedFlats();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -393,6 +384,8 @@ class _IndividualViewState extends ConsumerState<IndividualView> {
                                               message:
                                                   'Your payment was succesful',
                                               context: context);
+                                          Navigator.popAndPushNamed(
+                                              context, AppRoute.dashRoute);
                                         },
                                         style: ElevatedButton.styleFrom(
                                           elevation:

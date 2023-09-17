@@ -88,7 +88,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                       width: 10,
                     ),
                     Text(
-                      'Adarshangar, Kapan',
+                      'New Baneshwor',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 20,
@@ -105,9 +105,9 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             labelColor: Colors.black,
             unselectedLabelColor: Colors.grey,
             tabs: const [
-              Tab(text: 'I need a shared room'),
+              Tab(text: 'I need a room for rent'),
               Tab(
-                text: 'I need a room for rent',
+                text: 'I need a shared room',
               ),
             ],
             onTap: (index) {
